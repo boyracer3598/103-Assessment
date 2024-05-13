@@ -7,7 +7,6 @@
 #include <windows.h>
 #include <limits>
 
-
 using namespace std;
 bool access = false;
 bool admin = false;
@@ -69,19 +68,25 @@ void createAccount() {
 //delete an account in the txt file
 void deleteAccount() {
     string username, password;
-    cout << "Enter username: ";
+    cout << "Enter username to delete: ";
     cin >> username;
-    cout << "Enter password: ";
+    cout << "Enter password of user to delete: ";
     cin >> password;
     
     //checks if user is sure
+    if (username == currentUsername) {
+        cout << "You cannot delete your own account" << endl;
+        return;
+    }
     cout << "Are you sure you want to delete this account? (y/n): ";
     char choice;
     cin >> choice;
     if (choice == 'n') {
+       
         cout << "Account deletion cancelled" << endl;
         return;
     }
+
     ifstream file("loginData.txt");
     
     string line2;
@@ -89,7 +94,7 @@ void deleteAccount() {
     ofstream temp("temp.txt");
     Sleep(1000);
     while (getline(file, line2)) {
-        if (line2 != username + " " + password) {
+        if (line2 != username + " " + password + "_0" && line2 != username + " " + password + "_1") {
             
            
             temp << line2 << endl;
@@ -113,6 +118,7 @@ void deleteAccount() {
 }
 
 void login() {
+    int attempts = 0;
     while (access == false) {
         map <string, string> logins;
         map <string, string> adminPerms;
@@ -151,23 +157,34 @@ void login() {
         } else {
             cout << "Login failed" << endl;
             logAction(currentUsername + "::" + "Login failed: " + username);
-            cout << "Do you want to create a new account? (y/n): ";
+            attempts++;
+            if (attempts == 3) {
+                cout << "You have reached the maximum number of attempts" << endl;
+                logAction(currentUsername + "::" + "Reached maximum login attempts");
+                break;
+            }
+            //asks user if they would like to try again
+            cout << "Would you like to try again? (y/n): ";
             char choice;
             cin >> choice;
-            if (choice == 'y') {
-                logAction(currentUsername + "::" + "Attempted to create account after failed login");
-                createAccount();
-                
-            } else {
-                //do you want to try again
-                cout << "Do you want to try again? (y/n): ";
-                char choice1;
-                cin >> choice1;
-                if (choice == 'n') {
+            if (choice == 'n') {
+                //asks user if they would like to make a account
+                cout << "Would you like to create an account? (y/n): ";
+                char choice2;
+                cin >> choice2;
+                if (choice2 == 'y') {
+                    createAccount();
+                    logAction(currentUsername + "::" + "Account created after failed login");
+                    //changes current username to the new account
+                    
+
+                } else {
                     break;
                 }
-
+                
             }
+
+           
 
         }
     }
@@ -183,6 +200,7 @@ int main() {
         cout << "2. create account" << endl;
         cout << "3. delete account" << endl;
         cout << "4. logout" << endl;
+        cout << "5. exit" << endl;
 
         int choice = validInput();
         switch (choice) {
@@ -217,6 +235,9 @@ int main() {
                 logAction(currentUsername + "::" + "Logout");
                 currentUsername = "";
                 break;
+            case 5:
+                logAction("::Program ended::");
+                return 0;
             default:
                 cout << "Invalid choice" << endl;
                 logAction(currentUsername + "::" + "Invalid choice taken in menu");
