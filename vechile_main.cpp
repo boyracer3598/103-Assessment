@@ -1,3 +1,5 @@
+//not finished, need to add more functionality to the program
+
 #include <iostream>
 #include <fstream>
 #include <map>
@@ -88,7 +90,7 @@ void deleteAccount() {
     Sleep(1000);
     while (getline(file, line2)) {
         if (line2 != username + " " + password) {
-            cout << "not right account" << endl;
+            
            
             temp << line2 << endl;
         } else {
@@ -122,10 +124,7 @@ void login() {
             string password = line.substr(line.find(' ') + 1, line.find('_') - line.find(' ') - 1);
             string adminPerm = line.substr(line.find('_') + 1, line.length() - 1);
 
-            //debugging
-            cout << "username: " << username << endl;
-            cout << "password: " << password << endl;
-            cout << "adminPerm: " << adminPerm << endl;
+            
             
            
             logins[username] = password;
