@@ -21,7 +21,7 @@ int validInput()
     while(cin.fail())
     {
         cin.clear();
-        cin.ignore(numeric_limits<streamsize>::max(),'\n');
+        cin.ignore(1000,'\n');
         cout << "Bad entry.  Enter a NUMBER: ";
         cin >> x;
     }
