@@ -67,6 +67,7 @@ void createAccount() {
 
 //delete an account in the txt file
 void deleteAccount() {
+    bool accountDeleted = false;
     string username, password;
     cout << "Enter username to delete: ";
     cin >> username;
@@ -100,17 +101,26 @@ void deleteAccount() {
             temp << line2 << endl;
         } else {
             cout << "deleting account" << endl;
+            cout << "Account deleted successfully" << endl;
+            logAction(currentUsername + "::" + "Account deleted: " + username);
+            accountDeleted = true;
         }
     }
     file.close();
     temp.close();
+
+    if (accountDeleted == false) {
+        cout << "Account not found" << endl;
+        logAction(currentUsername + "::" + "Account not found: " + username);
+        
+    }
     
     remove("loginData.txt");
     rename("temp.txt", "loginData.txt");
     
     
-    cout << "Account deleted successfully" << endl;
-    logAction(currentUsername + "::" + "Account deleted: " + username);
+    
+    
    
         
     
