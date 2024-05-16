@@ -5,17 +5,15 @@ When naming Variable do the follow.
 •	Constant variables in SCREAMINGCASE.
 
 Variable Rules
-•	All constat variable should be global. 
-•	Local Variables can’t have same name as a global variable.
+•	All constant variable should be global. 
+•	Local variables cannot have same name as a global variable.
 
 Rules with Class
-•	 private variables and have set and get methods.
+•	Private variables and have set and get methods.
 •	All classes should have a default constructor so used in a collection.
-•	 Static functions to be declared/written after the constructor in the class.
+•	Static functions to be declared/written after the constructor in the class.
 
-
-
-Order of things
+Order
 All header files should be imported as followed: C++ standard library, other library, project headers.
- When declaring local variables in a function. Declaring they as close as the top of function as possible.
+When declaring local variables in a function: Declare them as close to the top of function as possible.
 
