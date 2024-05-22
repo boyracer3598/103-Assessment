@@ -7,6 +7,7 @@
 #include <windows.h>
 #include <limits>
 #include <sstream>
+#include <cstring>
 
 
 using namespace std;
@@ -39,7 +40,7 @@ void logAction(string action) {
 //create new account in txt file
 void createAccount() {
     cin.ignore(1000, '\n');
-    string username, password, dob, address, phone, email, RegoNum;
+    string username, password, dob, gender, address, phone, email, RegoNum;
     cout << "Enter new username: ";
     cin >> username;
     cout << "Enter new password: ";
@@ -51,6 +52,9 @@ void createAccount() {
         cout << "Invalid date of birth, please enter in the format dd/mm/yyyy: ";
         cin >> dob;
     }
+    cout << "enter your gender: ";
+    cin >> gender;
+
     cout << "Enter your address: ";
     //user can enter multiple words for the address
     cin.ignore(1000, '\n');
@@ -70,7 +74,7 @@ void createAccount() {
         cin >> choice;
         if (choice == 'y') {
             ofstream file("Customer_registration.txt", ios::app);
-            file << endl << username << " " << password << " " << dob << " " << address << " " << phone << " " << email << " " << RegoNum << "_" << "1";
+            file << endl << username << " " << password << " " << dob << " " << gender << " >" <<address << "< " << phone << " " << email << " " << RegoNum << "_" << "1";
             file.close();
             cout << "Account created successfully" << endl;
             logAction(currentUsername + "::" + "Admin account created: " + username);
@@ -78,7 +82,7 @@ void createAccount() {
         }
     } else {
         ofstream file("Customer_registration.txt", ios::app);
-        file << endl << username << " " << password << " " << dob << " " << ">" <<address << "< " << phone << " " << email << " " << RegoNum << "_" << "0";
+        file << endl << username << " " << password << " " << dob << " " << gender << " >" <<address << "< " << phone << " " << email << " " << RegoNum << "_" << "0";
         file.close();
         cout << "Account created successfully" << endl;
         logAction(currentUsername + "::" + "Account created: " + username);
@@ -117,10 +121,24 @@ int main() {
                 cin >> password;
                 ifstream file("Customer_registration.txt");
                 string line;
+                string actualUsername;
+                string actualPassword;
                 while (getline(file, line)) {
-                    //checks the length of first word in the line, if it is the same as the username entered
+                    //uses strtok to split the line into the username, paswsword, and the rest of the line
+                    char *cstr = new char[line.length() + 1];
+                    char *Ptoken = new char[line.length() + 1];
+                    strcpy(cstr, line.c_str());
+                    char *token = strtok(cstr, " ");
+                    strcpy(Ptoken, line.c_str());\
+                    actualUsername = token;
+                    token = strtok(NULL, " ");
+                    actualPassword = Ptoken;
+                    Ptoken = strtok(NULL, " ");
+                
 
-                    if (line.substr(0, username.length()) == username && line.find(password) != string::npos ){
+                    cout << actualUsername << endl;
+                    cout << actualPassword << endl;
+                    if (actualUsername == username && actualPassword == password){
                         cout << "Login successful" << endl;
                         currentUsername = username;
                         logAction(currentUsername + "::" + "Login");
