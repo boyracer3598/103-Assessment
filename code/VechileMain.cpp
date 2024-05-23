@@ -8,6 +8,10 @@
 #include <limits>
 #include <sstream>
 #include <cstring>
+#include <utility> 
+#include <stdexcept> 
+#include <vector>
+#include <regex>
 
 
 using namespace std;
@@ -15,6 +19,26 @@ bool access = false;
 bool admin = false;
 bool loggedIn = false;
 string currentUsername = "";
+
+//function to read the csv file and return a vector of pairs with the vector containing the data
+vector<pair<string, vector<string>>> read_csv(string filename) {
+    ifstream file(filename);
+    vector<pair<string, vector<string>>> result;
+    string line;
+    string cell;
+    vector<string> values;
+    while (getline(file, line)) {
+        stringstream lineStream(line);
+        while (getline(lineStream, cell, ',')) {
+            values.push_back(cell);
+        }
+        result.push_back(make_pair(values.at(0), values));
+        values.clear();
+    }
+    return result;
+}
+
+
 
 int validInput()
 {
@@ -73,16 +97,16 @@ void createAccount() {
         char choice;
         cin >> choice;
         if (choice == 'y') {
-            ofstream file("Customer_registration.txt", ios::app);
-            file << endl << username << " " << password << " " << dob << " " << gender << " >" <<address << "< " << phone << " " << email << " " << RegoNum << "_" << "1";
+            ofstream file("Customer_registration.csv", ios::app);
+            file << username << "," << password << "," << dob << "," << gender << "," <<address << "," << phone << "," << email << "," << RegoNum << "," << "1" << endl;
             file.close();
             cout << "Account created successfully" << endl;
             logAction(currentUsername + "::" + "Admin account created: " + username);
             return;
         }
     } else {
-        ofstream file("Customer_registration.txt", ios::app);
-        file << endl << username << " " << password << " " << dob << " " << gender << " >" <<address << "< " << phone << " " << email << " " << RegoNum << "_" << "0";
+        ofstream file("Customer_registration.csv", ios::app);
+        file << username << "," << password << "," << dob << "," << gender << "," <<address << "," << phone << "," << email << "," << RegoNum << "," << "0" << endl;
         file.close();
         cout << "Account created successfully" << endl;
         logAction(currentUsername + "::" + "Account created: " + username);
@@ -101,8 +125,10 @@ int main() {
         cout << "2. info and contact" << endl;
         cout << "3. Exit" << endl;
         cout << "please enter the number of the option you would like to select" << endl;
-        int choice = validInput();
+        int choice = validInput();  
         if (choice == 1) {
+            int attempts = 0;
+            int accountNum = 0;
             //clear the screen
             system("CLS");
             cout << "Welcome to the login/registration page" << endl;
@@ -113,54 +139,63 @@ int main() {
             cout << "please enter the number of the option you would like to select" << endl;
             int choice2 = validInput();
             if (choice2 == 1 && access == false) {
-                cout << "Enter username: ";
-                string username;
-                cin >> username;
-                cout << "Enter password: ";
-                string password;
-                cin >> password;
-                ifstream file("Customer_registration.txt");
-                string line;
-                string actualUsername;
-                string actualPassword;
-                while (getline(file, line)) {
-                    //uses strtok to split the line into the username, paswsword, and the rest of the line
-                    char *cstr = new char[line.length() + 1];
-                    char *Ptoken = new char[line.length() + 1];
-                    strcpy(cstr, line.c_str());
-                    char *token = strtok(cstr, " ");
-                    strcpy(Ptoken, line.c_str());\
-                    actualUsername = token;
-                    token = strtok(NULL, " ");
-                    actualPassword = Ptoken;
-                    Ptoken = strtok(NULL, " ");
-                
+                while (access == false && attempts < 3) {
+                    cout << "Enter username: ";
+                    string username;
+                    cin >> username;
+                    cout << "Enter password: ";
+                    string password;
+                    cin >> password;
+                    //uses readcsv function to read the csv file
+                    vector<pair<string, vector<string>>> result = read_csv("Customer_registration.csv");
+                    //loops through the vector of pairs to check if the username and password match
+                    string actualUsername = "";
+                    string actualPassword = "";
+                    for (int i = 0; i < result.size(); i++) {
+                        if (result.at(i).first == username) {
+                            actualUsername = result.at(i).first;
+                            actualPassword = result.at(i).second.at(1);
+                            accountNum = i;
+                        }
+                        
+                    }
 
-                    cout << actualUsername << endl;
-                    cout << actualPassword << endl;
+                    
+
                     if (actualUsername == username && actualPassword == password){
                         cout << "Login successful" << endl;
                         currentUsername = username;
                         logAction(currentUsername + "::" + "Login");
                         access = true;
-                        if (line.find("_1") != string::npos) {
+                        //check if the account has admin permissions
+                        if (result.at(accountNum).second.at(8) == "1") {
                             admin = true;
-                            logAction(currentUsername + "::" + "Admin login");
                             cout << "You have admin permissions" << endl;
                         }
-                        break;
+                        
+                    } else {
+                        cout << "Login failed" << endl;
+                        attempts++;
+                        if (attempts == 3) {
+                            cout << "You have reached the maximum number of attempts" << endl;
+                            cout << "would you like to create an account? (y/n): ";
+                            char choice;
+                            cin >> choice;
+                            if (choice == 'y') {
+                                createAccount();
+                            }
+                            //clear the screen
+                            system("CLS");
+                        }
+                        
                     }
                 }
-                if (access == false) {
-                    cout << "Login failed" << endl;
-                    cout << "would you like to create an account? (y/n): ";
-                    char choice;
-                    cin >> choice;
-                    if (choice == 'y') {
-                        createAccount();
+                
+                
+                    
 
-                    }
-                }
+                
+                
             } else if (choice2 == 1 && access == true) {
                 //clear the screen'
                 system("CLS");
