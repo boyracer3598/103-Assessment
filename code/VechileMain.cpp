@@ -64,32 +64,72 @@ void logAction(string action) {
 //create new account in txt file
 void createAccount() {
     cin.ignore(1000, '\n');
-    string username, password, dob, gender, address, phone, email, RegoNum;
+    cin.clear();
+    string username = "", password = "", dob, gender, address, phone, email, RegoNum;
     cout << "Enter new username: ";
-    cin >> username;
+    getline(cin, username);
+    //checks if there is a space in the username and asks the user to enter a new username
+    while (username.find(" ") != string::npos) {
+        cout << "Username cannot contain spaces, please enter a new username: ";
+        cin.clear();
+        getline(cin, username);
+    }
+    
     cout << "Enter new password: ";
-    cin >> password;
+    cin.clear();
+    getline(cin, password);
+    while (password.find(" ") != string::npos) {
+        cout << "password cannot contain spaces, please enter a new password: ";
+        cin.clear();
+        getline(cin, password);
+    }
+    cin.clear();
     cout << "Enter your date of birth (dd/mm/yyyy): ";
-    cin >> dob;
+    getline(cin, dob);
     //checks if the date of birth is in the correct format
     while (dob.length() != 10 || dob[2] != '/' || dob[5] != '/') {
         cout << "Invalid date of birth, please enter in the format dd/mm/yyyy: ";
-        cin >> dob;
+        cin.clear();
+        getline(cin, dob);
     }
+    cin.clear();
     cout << "enter your gender: ";
-    cin >> gender;
+    getline(cin, gender);
 
     cout << "Enter your address: ";
     //user can enter multiple words for the address
-    cin.ignore(1000, '\n');
+    cin.clear();
+   
     getline(cin, address);
+    cin.clear();
 
     cout << "Enter your phone number: ";
-    cin >> phone;
+    getline(cin, phone);
+    //checks if the phone number is an int and contains no spaces
+    while (phone.find(" ") != string::npos || phone.find_first_not_of("0123456789") != string::npos) {
+        cout << "Invalid phone number, please enter a valid phone number: ";
+        cin.clear();
+        getline(cin, phone);
+    } 
+
     cout << "Enter your email: ";
-    cin >> email;
+    cin.clear();
+    getline(cin, email);
+    //checks if the email is in the correct format
+    while (!regex_match(email, regex("([a-zA-Z0-9]+)@([a-zA-Z0-9]+)\\.([a-zA-Z0-9]+)"))) {
+        cout << "Invalid email, please enter a valid email: ";
+        cin.clear();
+        getline(cin, email);
+    }
     cout << "Enter your vehicle registration number: ";
-    cin >> RegoNum;
+    cin.clear();
+    getline(cin, RegoNum);
+    //checks if the RegoNum is in the correct format and contains no spaces
+    while (RegoNum.length() != 6 || RegoNum.find(" ") != string::npos){
+        cout << "Invalid registration number, please enter a valid registration number: ";
+        cin.clear();
+        getline(cin, RegoNum);
+    }
 
 
     if (admin == true) {
