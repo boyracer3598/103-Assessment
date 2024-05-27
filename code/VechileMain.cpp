@@ -153,6 +153,66 @@ void createAccount() {
     }
 }
 
+void AdminConsole() {
+    //clear the screen
+    while (true) {
+        system("CLS");
+        cout << "Welcome to the admin console" << endl;
+        cout << "1. View all accounts" << endl;
+        cout << "2. Delete account" << endl;
+        cout << "3. Back" << endl;
+        cout << "please enter the number of the option you would like to select" << endl;
+        int choice = validInput();
+        if (choice == 1) {
+            vector<pair<string, vector<string>>> result = read_csv("Customer_registration.csv");
+            for (int i = 0; i < result.size(); i++) {
+                cout << "Username: " << result.at(i).first << " " << "dob: " << result.at(i).second.at(2) <<  " gender: " << result.at(i).second.at(3) << " address: " << result.at(i).second.at(4) << " phone: " << result.at(i).second.at(5) << " email: " << result.at(i).second.at(6) << " RegoNum: " << result.at(i).second.at(7) << " admin: " << result.at(i).second.at(8) << endl;
+            }
+            cout << "Press enter twice to continue" << endl;
+            cin.ignore();
+            cin.get();
+            if (cin.get()) {
+                continue;
+            }
+        } else if (choice == 2) {
+            cout << "Enter the username of the account you would like to delete: ";
+            string username;
+            bool found = false;
+            cin >> username;
+            vector<pair<string, vector<string>>> result = read_csv("Customer_registration.csv");
+            for (int i = 0; i < result.size(); i++) {
+                if (result.at(i).first == username) {
+                    result.erase(result.begin() + i);
+                    cout << "Account deleted successfully" << endl;
+                    logAction(currentUsername + "::" + "Account deleted: " + username);
+                    found = true;
+                }
+                //if username not found, notify user
+                if (i == result.size() - 1 && found == false) {
+                    cout << "Username not found" << endl;
+                }
+            }
+            ofstream file("Customer_registration.csv");
+            for (int i = 0; i < result.size(); i++) {
+                for (int j = 0; j < result.at(i).second.size(); j++) {
+                    file << result.at(i).second.at(j);
+                    if (j != result.at(i).second.size() - 1) {
+                        file << ",";
+                    }
+                }
+                file << endl;
+            }
+            file.close();
+            
+
+            Sleep(2000);
+        } else if (choice == 3) {
+            return;
+        }
+    }
+}
+            
+
 int main() {
     logAction("::Program started::");
     cout << "Hello!" << endl;
@@ -164,6 +224,9 @@ int main() {
         cout << "1. Login/registration" << endl;
         cout << "2. info and contact" << endl;
         cout << "3. Exit" << endl;
+        if (admin == true) {
+            cout << "4. Admin menu" << endl;
+        }
         cout << "please enter the number of the option you would like to select" << endl;
         int choice = validInput();  
         if (choice == 1) {
@@ -203,6 +266,8 @@ int main() {
                     
 
                     if (actualUsername == username && actualPassword == password){
+                        //clear the screen
+                        system("CLS");
                         cout << "Login successful" << endl;
                         currentUsername = username;
                         logAction(currentUsername + "::" + "Login");
@@ -253,10 +318,12 @@ int main() {
                 //clear the screen
                 system("CLS");
             
-            }else {
+            } else {
                 //clear the screen
                 system("CLS");
             }
+            
+            
         
     
         
@@ -269,6 +336,12 @@ int main() {
 
         }else if (choice == 3){
             break;
+        }else if (choice == 4) {
+                //clear the screen
+                AdminConsole();
+                system("CLS");
+
+
         }
         
     }
