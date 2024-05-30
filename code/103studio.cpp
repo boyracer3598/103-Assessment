@@ -161,6 +161,7 @@ void customerMenu() {
         while (true) {
 
             system("CLS"); 
+            //customer screen menu
             cout << "Welcome to the Customer Menu. Please select an option.\n" << endl;
             cout << "1. Policy and Insurance" << endl;
             cout << "2. Claims" << endl;
@@ -169,7 +170,7 @@ void customerMenu() {
             cout << "5. Back" << endl;
             int choice3 = validInput();
             if (choice3 == 5) {
-                cout << "Goodbye" << endl;
+                cout << "Goodbye\n" << endl;
                 system("CLS");
                 break;
 
@@ -177,22 +178,24 @@ void customerMenu() {
             else if (choice3 == 1) {
                 cout << "Policy and Insurance" << endl;
                 cout << "1. View Policies" << endl;
-                cout << "2. Register" << endl;
+                cout << "2. Register for a Policy" << endl;
                 cout << "3. Get a Quote" << endl;
                 cout << "4. Back" << endl;
                 int choice4 = validInput();
                 if (choice4 == 1) {
                     //clear screen
-                    system("CLS");        
-                    cout << "1. Comprehensive" << endl;
+                    system("CLS");      
+
+                    //policy screen menu  
+                    cout << "1. Comprehensive\n" << endl;
                     cout << "2. Third Party Fire & Theft" << endl;
                     cout << "3. Third Party Only" << endl;
                     cout << "4. Register for Policy" << endl;
                     cout << "5. Back" << endl;
                     int choice5 = validInput();
-
+                
                     if (choice5 == 1) {
-                        cout << "Comprehensive Insurance" << endl;
+                        cout << "Comprehensive Insurance\n" << endl;
                         cout << "Keep yourself and your car completely protected with our most popular policy. We will cover the damage to your car, as well as any damage you might cause to someone else’s vehicle or property." << endl;
                         cout << "Benefits:" << endl;
                         cout << "- Damage to your vehicle" << endl;
@@ -207,7 +210,7 @@ void customerMenu() {
                         }
 
                     }else if (choice5 == 2) {
-                        cout << "Third Party Fire & Theft Insurance" << endl;
+                        cout << "Third Party Fire & Theft Insurance\n" << endl;
                         cout << "Cover for your car if it's damaged by fire or stolen, and if you accidentally cause damage to someone else's car or property." << endl;
                         cout << "Benefits:" << endl;
                         cout << "- Damage caused by fire" << endl;
@@ -221,7 +224,7 @@ void customerMenu() {
                             continue;
                         }
                     }else if (choice5 == 3) {
-                        cout << "Third Party Only Insurance" << endl;
+                        cout << "Third Party Only Insurance\n" << endl;
                         cout << "Our most basic policy. It covers the damage you might cause to someone else’s vehicle or property, but not your own." << endl;
                         cout << "Benefits:" << endl;
                         cout << "- Damage to other people’s vehicles or property" << endl;
@@ -234,8 +237,114 @@ void customerMenu() {
                         }
 
                     }
+                }else if (choice4 == 2) {
+                    cout << "Register for a Policy" << endl;
+                    cout << "Please select the Policy type you would like to register for:" << endl;
+                    cout << "1. Comprehensive" << endl;
+                    cout << "2. Third Party Fire & Theft" << endl;
+                    cout << "3. Third Party Only" << endl;
+                    cout << "4. Back" << endl;
+                    int choice8 = validInput();
+                    if (choice8 == 1) 
+
                 }
         
+            }else if (choice3 == 2) {
+
+                while (true) { 
+                    cout << "Claims Menu\n" << endl;
+                    cout << "1. Make a Claim" << endl;
+                    cout << "2. Check Claim Status" << endl;
+                    cout << "3. Back" << endl;
+                    int choice6 = validInput();
+                    
+                    if (choice6 == 3) {
+                        break;
+
+                    }else if (choice6 == 1) {
+                        while (true) {
+                            cout << "Make a Claim" << endl;
+                            cout << "Please select your policy type:" << endl;
+                            cout << "1. Comprehensive" << endl;
+                            cout << "2. Third Party Fire & Theft" << endl;
+                            cout << "3. Third Party Only" << endl;
+                            cout << "4. Back" << endl;
+                            int choice7 = validInput();
+                           //check with user if this is the correct account to make a claim with
+                            if(choice7 == 1) {
+                                cout << "Comprehensive Insurance" << endl;
+                                vector<pair<string, vector<string>>> result = read_csv("Customer_registration.csv");
+                                for (int i = 0; i < result.size(); i++) {
+                                    if (result.at(i).first == currentUsername) {
+                                        cout << "Is this the correct account to make a claim with? (y/n): " << result.at(i).first << endl;
+                                        cin.clear();
+                                        char choice;
+                                        cin >> choice;
+                                        if (choice == 'y') {
+                                            //from the user account details, get the registration number, contact number, email and address and store variables
+                                            //create a csv that will store claim data
+
+                                            string RegoNum = result.at(i).second.at(7);
+                                            string phone = result.at(i).second.at(5);
+                                            string email = result.at(i).second.at(6);
+                                            string address = result.at(i).second.at(4);
+                                            cout << "Some Claim information has been pre-filled for you from your account. Please provide further details towards your Claim." << endl;
+                                            cin.clear();
+                                            cin.ignore(1000, '\n');
+                                            cout << "Enter the date that the incident occured (dd/mm/yyyy): ";
+                                            string incidentDate;
+                                            //checks if the date of birth is in the correct format
+                                            getline(cin, incidentDate);
+                                            cin.clear();
+                                            while (incidentDate.length() != 10 || incidentDate[2] != '/' || incidentDate[5] != '/') {
+                                                cout << "Invalid date, please enter in the format dd/mm/yyyy: ";
+                                                cin.clear();
+                                                getline(cin, incidentDate);
+                                            }
+                                            //checks if the time is in the correct format
+                                            cout << "Enter the time that the incident occured (hh.mm): ";
+                                            string incidentTime;
+                                            cin.clear();
+                                            getline(cin, incidentTime);
+                                            while (incidentTime.length() != 5 || incidentTime[2] != '.') {
+                                                cout << "Invalid time, please enter in the format hhmm: ";
+                                                cin.clear();
+                                                getline(cin, incidentTime);
+                                            }
+                                            cout << "Please provide a brief description of the incident: ";
+                                            string description;
+                                            cin.clear();
+                                            getline(cin, description);
+
+                                            //store the claim data in a csv file
+                                            ofstream file("Claims.csv", ios::app);
+                                            file << currentUsername << "," << RegoNum << "," << phone << "," << email << "," << address << "," << incidentDate << "," << incidentTime << "," << description << endl;
+                                            file.close();
+                                            cout << "Claim made successfully" << endl;
+                                            logAction(currentUsername + "::" + "Claim made");
+                                            break;
+                                        }
+                                    }
+                                }
+                            }else if (choice7 == 4) {
+                                break;
+                            }
+                        
+                       
+                        }
+
+
+
+                    }
+
+
+
+
+                        
+
+
+
+                }
             }
     
         }
@@ -256,7 +365,7 @@ int main() {
     while (true) {
 
 
-        cout << "what would you like to do?" << endl;
+        cout << "What would you like to do?\n" << endl;
         cout << "1. Login/Registration" << endl;
         cout << "2. Customer Menu" << endl;
         cout << "3. Info and Contact" << endl;
@@ -268,15 +377,17 @@ int main() {
             int accountNum = 0;
             //clear the screen
             system("CLS");
-            cout << "Welcome to the login/registration page" << endl;
+            cout << "Welcome to the Login/Registration page\n" << endl;
             cout << "1. Login" << endl;
             cout << "2. Register" << endl;
-            cout << "3. logout" << endl;
+            cout << "3. Logout" << endl;
             cout << "4. Back" << endl;
-            cout << "please enter the number of the option you would like to select" << endl;
+            cout << "Please enter the number of the option you would like to select" << endl;
             int choice2 = validInput();
             if (choice2 == 1 && access == false) {
                 while (access == false && attempts < 3) {
+                    //clear the screen
+                    system("CLS");
                     cout << "Enter username: ";
                     string username;
                     cin >> username;
@@ -300,7 +411,7 @@ int main() {
 
 
                     if (actualUsername == username && actualPassword == password) {
-                        cout << "Login successful" << endl;
+                        cout << "Login successful!\n" << endl;
                         currentUsername = username;
                         logAction(currentUsername + "::" + "Login");
                         access = true;
@@ -348,7 +459,7 @@ int main() {
                 access = false;
                 admin = false;
                 currentUsername = "";
-                cout << "Goodbye!" << endl;
+                cout << "Goodbye!\n" << endl;
                 logAction(currentUsername + "::loged out");
                 Sleep(3000);
                 //clear the screen
