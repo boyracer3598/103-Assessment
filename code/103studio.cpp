@@ -292,18 +292,21 @@ void customerMenu() {
                                             getline(cin, year);
                                         }
                                         int policyNum;
-                                        //section to read the last policy number in the csv file and increment by 1 does not work
+                                        //read the csv file to get the last policy number and increment by 1
                                         vector<pair<string, vector<string>>> result1 = read_csv("Policies.csv");
-                                        if ((stoi(result1.at(result1.size()).second.at(9)) == 0) && (result1.size() < 1)) { 
+                                        if (result1.size() == 0) {
                                             policyNum = 1;
-
-
-                                        }else { 
-                                            policyNum = stoi(result1.at(result1.size()).second.at(9)) + 1;
-                                        }
-                                        //read the last policy number at collumn 9 of the last row in the csv file and increment by 1
+                                        } else if (result.size() == 1) {
+                                            policyNum = 2;
                                         
-                                        cout << policyNum << endl;
+                                        }else {
+                                            for (int i = 0; i < result1.size(); i++) {
+                                                policyNum = i + 2;
+                                            }
+                                        }
+                                        
+                                        
+                                        cout << "your policy number is: " << policyNum << endl;
 
                                         //store the policy data in a csv file
                                         ofstream file("Policies.csv", ios::app);
@@ -505,6 +508,65 @@ void customerMenu() {
 
 }
 
+void AdminConsole() {
+    //clear the screen
+    while (true) {
+        system("CLS");
+        cout << "Welcome to the admin console" << endl;
+        cout << "1. View all accounts" << endl;
+        cout << "2. Delete account" << endl;
+        cout << "3. Back" << endl;
+        cout << "please enter the number of the option you would like to select" << endl;
+        int choice = validInput();
+        if (choice == 1) {
+            vector<pair<string, vector<string>>> result = read_csv("Customer_registration.csv");
+            for (int i = 0; i < result.size(); i++) {
+                cout << "Username: " << result.at(i).first << " " << "dob: " << result.at(i).second.at(2) <<  " gender: " << result.at(i).second.at(3) << " address: " << result.at(i).second.at(4) << " phone: " << result.at(i).second.at(5) << " email: " << result.at(i).second.at(6) << " RegoNum: " << result.at(i).second.at(7) << " admin: " << result.at(i).second.at(8) << endl;
+            }
+            cout << "Press enter twice to continue" << endl;
+            cin.ignore();
+            cin.get();
+            if (cin.get()) {
+                continue;
+            }
+        } else if (choice == 2) {
+            cout << "Enter the username of the account you would like to delete: ";
+            string username;
+            bool found = false;
+            cin >> username;
+            vector<pair<string, vector<string>>> result = read_csv("Customer_registration.csv");
+            for (int i = 0; i < result.size(); i++) {
+                if (result.at(i).first == username && username != currentUsername) {
+                    result.erase(result.begin() + i);
+                    cout << "Account deleted successfully" << endl;
+                    logAction(currentUsername + "::" + "Account deleted: " + username);
+                    found = true;
+                }
+                //if username not found, notify user
+                if (i == result.size() - 1 && found == false) {
+                    cout << "Username not found" << endl;
+                }
+            }
+            ofstream file("Customer_registration.csv");
+            for (int i = 0; i < result.size(); i++) {
+                for (int j = 0; j < result.at(i).second.size(); j++) {
+                    file << result.at(i).second.at(j);
+                    if (j != result.at(i).second.size() - 1) {
+                        file << ",";
+                    }
+                }
+                file << endl;
+            }
+            file.close();
+            
+
+            Sleep(2000);
+        } else if (choice == 3) {
+            return;
+        }
+    }
+}
+
 int main() {
     logAction("::Program started::");
     cout << "Hello!" << endl;
@@ -517,6 +579,9 @@ int main() {
         cout << "2. Customer Menu" << endl;
         cout << "3. Info and Contact" << endl;
         cout << "4. Exit" << endl;
+        if (admin == true) {
+            cout << "5. Admin menu" << endl;
+        }
         cout << "Please enter the number of the option you would like to select" << endl;
         int choice = validInput();
         if (choice == 1) {
@@ -532,9 +597,10 @@ int main() {
             cout << "Please enter the number of the option you would like to select" << endl;
             int choice2 = validInput();
             if (choice2 == 1 && access == false) {
+                //clear the screen
+                system("CLS");
                 while (access == false && attempts < 3) {
-                    //clear the screen
-                    system("CLS");
+                    
                     cout << "Enter username: ";
                     string username;
                     cin >> username;
@@ -570,7 +636,8 @@ int main() {
 
                     }
                     else {
-                        cout << "Login failed" << endl;
+                        system("CLS");
+                        cout << "Login failed, try again" << endl;
                         attempts++;
                         if (attempts == 3) {
                             cout << "You have reached the maximum number of attempts" << endl;
@@ -583,6 +650,7 @@ int main() {
                             //clear the screen
                             system("CLS");
                         }
+                        
 
                     }
                 }
@@ -636,9 +704,12 @@ int main() {
             cout << "Contact: 1-866-922-8694" << endl;
             cout << "Email: MMI@insurance.com" << endl;
 
-        }
-        else if (choice == 4) {
+        } else if (choice == 4) {
             break;
+        } else if (choice == 5) {
+            //clear the screen
+            AdminConsole();
+            system("CLS");
         }
 
     }
