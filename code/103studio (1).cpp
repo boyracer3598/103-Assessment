@@ -291,19 +291,19 @@ void customerMenu() {
                                             getline(cin, year);
                                         }
                                         int policyNum;
-                                        //generate a random 6 digit policy number that is assigned to the user once they register for a policy
-                                        vector<pair<string, vector<string>>> result1 = read_csv("Policies.csv");
-                                        if (stoi(result1.at(result1.size() - 1).second.at(9)) == 0) { 
-                                            //move up one row if the last policy number is 0
-                                            policyNum = stoi(result1.at(result1.size() - 2).second.at(9)) + 1;
-
-
-                                        }else { 
-                                            policyNum = stoi(result1.at(result1.size() - 1).second.at(9)) + 1;
-                                        }
-                                        //read the last policy number at collumn 9 of the last row in the csv file and increment by 1
                                         
-                                        cout << policyNum << endl;
+                                        vector<pair<string, vector<string>>> result1 = read_csv("Policies.csv");
+                                        for (int i = 0; i < result1.size(); i++) {
+                                            if (result1.size() == 0) {
+                                                policyNum = 1;
+                                            }else {
+                                                policyNum = i + 1;
+                                            }
+                                        }
+                                        
+                                        
+                                        
+                                        cout << "your policy number is: " << policyNum << endl;
 
                                         //store the policy data in a csv file
                                         ofstream file("Policies.csv", ios::app);
