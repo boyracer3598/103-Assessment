@@ -796,8 +796,7 @@ void customerMenu() {
                                         
                                     
                                 }
-                            }
-                        }                               
+                            }                               
                     } else if (claimsChoice == 2) {
                         break;
                     }
