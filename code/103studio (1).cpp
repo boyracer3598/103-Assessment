@@ -709,220 +709,97 @@ void customerMenu() {
                     cout << "2. Back" << endl;
                     int claimsChoice = validInput(); // this was choice6
                     
-                    if (claimsChoice == 2) {
-                        break;
+                    
 
-                    }else if (claimsChoice == 1) {
-                        while (true) {
-                            cout << "Make a Claim" << endl;
-                            cout << "Please select your policy type:" << endl;
-                            cout << "1. Comprehensive" << endl;
-                            cout << "2. Third Party Fire & Theft" << endl;
-                            cout << "3. Third Party Only" << endl;
-                            cout << "4. Back" << endl;
-                            int subClaimsChoice = validInput();//this was choice7
-                           //check with user if this is the correct account to make a claim with
-                            if(subClaimsChoice == 1) {
-                                
-                                //clear screen
-                                system("CLS");
-                                
-                                vector<pair<string, vector<string>>> result = read_csv("Customer_registration.csv");
-                                for (int i = 0; i < result.size(); i++) {
-                                    if (result.at(i).first == currentUsername) {
-                                        cout << "Is this the correct account to make a claim with? (y/n): " << result.at(i).first << endl;
-                                        cin.clear();
-                                        char choice;
-                                        cin >> choice;
-                                        if (choice == 'y') {
-                                        //from the user account details, get the registration number, contact number, email and address and store variables
-                                        //create a csv that will store claim data
-
-                                            string RegoNum = result.at(i).second.at(7);
-                                            string phone = result.at(i).second.at(5);
-                                            string email = result.at(i).second.at(6);
-                                            string address = result.at(i).second.at(4);
-                                            cout << "You are making a Claim for a Comprehensive Policy." << endl;
-                                            cout << "Some Claim information has been pre-filled for you from your account. Please provide further details towards your Claim." << endl;
-                                            cin.clear();
-                                            cin.ignore(1000, '\n');
-                                            cout << "Enter the date that the incident occured (dd/mm/yyyy): ";
-                                            string incidentDate;
-                                            //checks if the date of birth is in the correct format
-                                            getline(cin, incidentDate);
-                                            cin.clear();
-                                            while (incidentDate.length() != 10 || incidentDate[2] != '/' || incidentDate[5] != '/') {
-                                                cout << "Invalid date, please enter in the format dd/mm/yyyy: ";
-                                                cin.clear();
-                                                getline(cin, incidentDate);
-                                            }
-                                            //checks if the time is in the correct format
-                                            cout << "Enter the time that the incident occured (hh.mm): ";
-                                            string incidentTime;
-                                            cin.clear();
-                                            getline(cin, incidentTime);
-                                            while (incidentTime.length() != 5 || incidentTime[2] != '.') {
-                                                cout << "Invalid time, please enter in the format hhmm: ";
-                                                cin.clear();
-                                                getline(cin, incidentTime);
-                                            }
-                                            cout << "Please provide a brief description of the incident: ";
-                                            string description;
-                                            cin.clear();
-                                            getline(cin, description);
-
-                                            //store the claim data in a csv file
-                                            ofstream file("Claims.csv", ios::app);
-                                            file << currentUsername << "," << RegoNum << "," << phone << "," << email << "," << address << "," << incidentDate << "," << incidentTime << "," << description << "," << endl;
-                                            file.close();
-                                            cout << "Claim made successfully" << endl;
-                                            logAction(currentUsername + "::" + "Claim made");
-                                            break;
-
-                                        }else if (choice == 'n') {
-                                            cout << "Please login with the correct account you wish to make a Claim with." << endl;
-                                            Sleep(3000);
-                                            system("CLS");
-                                            break; 
-
-                                        }
-
-                                    }
+                    if (claimsChoice == 1) {
+                            //clear screen
+                            system("CLS");
+                            string policyType;
+                            vector<pair<string, vector<string>>> result = read_csv("Customer_registration.csv");
+                            //read the policies csv file to get the user's policy type
+                            vector<pair<string, vector<string>>> result1 = read_csv("Policies.csv");
+                            for (int i = 0; i < result1.size(); i++) {
+                                if (result1.at(i).first == currentUsername) {
+                                    cout << "Your policy type is: " << result1.at(i).second.at(10) << endl;
+                                    policyType = result1.at(i).second.at(10);
                                 }
-                            }else if(subClaimsChoice == 2) {
-                                
-                                //clear screen
-                                system("CLS");
-                                
-                                vector<pair<string, vector<string>>> result = read_csv("Customer_registration.csv");
-                                for (int i = 0; i < result.size(); i++) {
-                                    if (result.at(i).first == currentUsername) {
-                                        cout << "Is this the correct account to make a claim with? (y/n): " << result.at(i).first << endl;
-                                        cin.clear();
-                                        char choice;
-                                        cin >> choice;
-                                        if (choice == 'y') {
-                                        //from the user account details, get the registration number, contact number, email and address and store variables
-                                        //create a csv that will store claim data
+                            }
+                            for (int i = 0; i < result.size(); i++) {
+                                if (result.at(i).first == currentUsername) {
+                                    cout << "Is this the correct account to make a claim with? (y/n): " << result.at(i).first << endl;
+                                    cin.clear();
+                                    char choice;
+                                    cin >> choice;
+                                    if (choice == 'y') {
+                                    //from the user account details, get the registration number, contact number, email and address and store variables
+                                    //create a csv that will store claim data
 
-                                            string RegoNum = result.at(i).second.at(7);
-                                            string phone = result.at(i).second.at(5);
-                                            string email = result.at(i).second.at(6);
-                                            string address = result.at(i).second.at(4);
-                                            cout << "You are making a claim for a Third Party Fire & Theft Policy." << endl;
-                                            cout << "Some Claim information has been pre-filled for you from your account. Please provide further details towards your Claim." << endl;
+                                        string RegoNum = result.at(i).second.at(7);
+                                        string phone = result.at(i).second.at(5);
+                                        string email = result.at(i).second.at(6);
+                                        string address = result.at(i).second.at(4);
+                                        cout << "You are making a Claim for a " << policyType << " Policy." << endl;
+                                        cout << "Some Claim information has been pre-filled for you from your account. Please provide further details towards your Claim." << endl;
+                                        cin.clear();
+                                        cin.ignore(1000, '\n');
+                                        cout << "Enter the date that the incident occured (dd/mm/yyyy): ";
+                                        string incidentDate;
+                                        //checks if the date of birth is in the correct format
+                                        getline(cin, incidentDate);
+                                        cin.clear();
+                                        while (incidentDate.length() != 10 || incidentDate[2] != '/' || incidentDate[5] != '/') {
+                                            cout << "Invalid date, please enter in the format dd/mm/yyyy: ";
                                             cin.clear();
-                                            cin.ignore(1000, '\n');
-                                            cout << "Enter the date that the incident occured (dd/mm/yyyy): ";
-                                            string incidentDate;
-                                            //checks if the date of birth is in the correct format
                                             getline(cin, incidentDate);
-                                            cin.clear();
-                                            while (incidentDate.length() != 10 || incidentDate[2] != '/' || incidentDate[5] != '/') {
-                                                cout << "Invalid date, please enter in the format dd/mm/yyyy: ";
-                                                cin.clear();
-                                                getline(cin, incidentDate);
-                                            }
-                                            //checks if the time is in the correct format
-                                            cout << "Enter the time that the incident occured (hh.mm): ";
-                                            string incidentTime;
+                                        }
+                                        //checks if the time is in the correct format
+                                        cout << "Enter the time that the incident occured (hh.mm): ";
+                                        string incidentTime;
+                                        cin.clear();
+                                        getline(cin, incidentTime);
+                                        while (incidentTime.length() != 5 || incidentTime[2] != '.') {
+                                            cout << "Invalid time, please enter in the format hhmm: ";
                                             cin.clear();
                                             getline(cin, incidentTime);
-                                            while (incidentTime.length() != 5 || incidentTime[2] != '.') {
-                                                cout << "Invalid time, please enter in the format hhmm: ";
-                                                cin.clear();
-                                                getline(cin, incidentTime);
-                                            }
-                                            cout << "Please provide a brief description of the incident: ";
-                                            string description;
-                                            cin.clear();
-                                            getline(cin, description);
-
-                                            //store the claim data in a csv file
-                                            ofstream file("Claims.csv", ios::app);
-                                            file << currentUsername << "," << RegoNum << "," << phone << "," << email << "," << address << "," << incidentDate << "," << incidentTime << "," << description << "," << endl;
-                                            file.close();
-                                            cout << "Claim made successfully" << endl;
-                                            logAction(currentUsername + "::" + "Claim made");
-                                            break;
-
-                                        }else if (choice == 'n') {
-                                            cout << "Please login with the correct account you wish to make a Claim with." << endl;
-                                            Sleep(3000);
-                                            system("CLS");
-                                            break; 
-
                                         }
-                                    }
-                                }
-                            }else if (subClaimsChoice == 3) {
-                                
-                                //clear screen
-                                system("CLS");
-                                
-                                vector<pair<string, vector<string>>> result = read_csv("Customer_registration.csv");
-                                for (int i = 0; i < result.size(); i++) {
-                                    if (result.at(i).first == currentUsername) {
-                                        cout << "Is this the correct account to make a claim with? (y/n): " << result.at(i).first << endl;
+                                        cout << "Please provide a brief description of the incident: ";
+                                        string description;
                                         cin.clear();
-                                        char choice;
-                                        cin >> choice;
-                                        if (choice == 'y') {
-                                        //from the user account details, get the registration number, contact number, email and address and store variables
-                                        //create a csv that will store claim data
-
-                                            string RegoNum = result.at(i).second.at(7);
-                                            string phone = result.at(i).second.at(5);
-                                            string email = result.at(i).second.at(6);
-                                            string address = result.at(i).second.at(4);
-                                            cout << "You are making a claim for a Third Party Only Policy." << endl;
-                                            cout << "Some Claim information has been pre-filled for you from your account. Please provide further details towards your Claim." << endl;
-                                            cin.clear();
-                                            cin.ignore(1000, '\n');
-                                            cout << "Enter the date that the incident occured (dd/mm/yyyy): ";
-                                            string incidentDate;
-                                            //checks if the date of birth is in the correct format
-                                            getline(cin, incidentDate);
-                                            cin.clear();
-                                            while (incidentDate.length() != 10 || incidentDate[2] != '/' || incidentDate[5] != '/') {
-                                                cout << "Invalid date, please enter in the format dd/mm/yyyy: ";
-                                                cin.clear();
-                                                getline(cin, incidentDate);
-                                            }
-                                            //checks if the time is in the correct format
-                                            cout << "Enter the time that the incident occured (hh.mm): ";
-                                            string incidentTime;
-                                            cin.clear();
-                                            getline(cin, incidentTime);
-                                            while (incidentTime.length() != 5 || incidentTime[2] != '.') {
-                                                cout << "Invalid time, please enter in the format hhmm: ";
-                                                cin.clear();
-                                                getline(cin, incidentTime);
-                                            }
-                                            cout << "Please provide a brief description of the incident: ";
-                                            string description;
+                                        getline(cin, description);
+                                        //checks description has no commas
+                                        while (description.find(",") != string::npos) {
+                                            cout << "Invalid input, please remove commas: ";
                                             cin.clear();
                                             getline(cin, description);
-
-                                            //store the claim data in a csv file
-                                            ofstream file("Claims.csv", ios::app);
-                                            file << currentUsername << "," << RegoNum << "," << phone << "," << email << "," << address << "," << incidentDate << "," << incidentTime << "," << description << "," << endl;
-                                            file.close();
-                                            cout << "Claim made successfully" << endl;
-                                            logAction(currentUsername + "::" + "Claim made");
-                                            break;
-
-                                        }else if (choice == 'n') {
-                                            cout << "Please login with the correct account you wish to make a Claim with." << endl;
-                                            Sleep(3000);
-                                            system("CLS");
-                                            break; 
-
                                         }
+
+                                        //store the claim data in a csv file
+                                        ofstream file("Claims.csv", ios::app);
+                                        file << currentUsername << "," << RegoNum << "," << phone << "," << email << "," << address << "," << incidentDate << "," << incidentTime << "," << description << "," << policyType << endl;
+                                        file.close();
+                                        cout << "Claim request made, we will contact you with more information" << endl;
+                                        logAction(currentUsername + "::" + "Claim made");
+                                        break;
+
+                                    }else if (choice == 'n') {
+                                        cout << "Please login with the correct account you wish to make a Claim with." << endl;
+                                        Sleep(3000);
+                                        system("CLS");
+                                        break; 
+
                                     }
+
+                                    
+                                
+                            
+
+                                        
+                                    
                                 }
                             }
                         }                               
+                    } else if (claimsChoice == 2) {
+                        break;
                     }
                 }   
                 
