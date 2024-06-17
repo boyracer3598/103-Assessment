@@ -1,0 +1,68 @@
+Psuedocode - login and registration 
+Glossary:
+INPUT - indicates user input
+OUTPUT - indicates screen output
+WHILE - a loop...
+NEW LINE - output determines a new line
+FOR - a counting loop, or iteration
+REPEAT - UNTIL - an iteraton that has a condition
+
+Main Menu 
+
+- OUTPUT "Hello! Welcome to Mors Mutual Insurance..." NEW LINE
+- OUTPUT "What would you like to do?" NEW LINE
+
+Display options for user to enter an option. {
+    IF user selects 1 (Login) 
+    - INPUT valid username and password 
+    - OUTPUT "Login sucessful!" NEW LINE
+    ELSE user username and password are invalid 
+    - OUTPUT "Login Failed" 
+    IF user has reached maximum login attempts {
+        - OUTPUT "You have reached the maximum number of attempts." NEW LINE
+        - OUTPUT "Would you like to create an account?" NEW LINE
+        IF user inputs YES
+        LOOP repeats from Create Account Function.
+    }
+}ELSE IF user selects 2 (Register) {
+    - INPUT valid username and password. 
+        IF username contains spaces, INPUT again. {
+        - OUTPUT: "Username cannot contain spaces, please enter a different username." NEW LINE
+    }IF password contains spaces, INPUT again. {
+        - OUTPUT: "Password cannot contain spaces, please enter a different password." NEW LINE
+    }    
+    - INPUT valid date of birth
+    - OUTPUT "Please enter your date of birth (dd/mm/yyyy): " NEW LINE
+    IF format is incorrect, INPUT again. {
+        - OUTPUT: "Invalid date of birth. Please enter in the format: (dd/mm/yyyy): " NEW LINE
+    }
+    - INPUT gender
+    - INPUT address
+    - INPUT phone
+    IF format is incorrect, INPUT again. {
+        - OUTPUT "Invalid phone number. Please enter a valid phone number: " NEW LINE
+    }
+    - INPUT email address 
+    IF format is incorrect, INPUT again. {
+        - OUTPUT "Invalid email, please enter a valid email address: " NEW LINE
+    }
+    - INPUT registration number
+    IF format is incorrect, INPUT again. {
+        - OUTPUT "Invalid registration number, please enter a valid registration number: " NEW LINE
+    }
+    IF all user INPUT is correct {
+        - OUTPUT "Account created sucessfully." NEW LINE
+        - Data stored in off stream CVS file named "Customer_registration.csv" 
+    }
+}IF user selects 2 (Customer Menu) {
+
+}
+
+        
+
+
+
+
+
+
+
