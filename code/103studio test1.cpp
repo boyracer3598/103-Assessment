@@ -245,7 +245,7 @@ void createAccount() {
     cout << "Enter your gender(m/f): ";// gender input can be M or F for quote reasons
     getline(cin, gender);
     //checks
-    while (gender != "M" || gender != "F" || gender != "m" || gender != "f"){
+    while (gender != "M" && gender != "F" && gender != "m" && gender != "f"){
         cout << "please enter a valid input (M/F): ";
         cin.clear();
         getline(cin, gender);
@@ -324,150 +324,154 @@ void displayPolicy(int policyType) {
     }
 
     
-
-    cout << "You have selected: " << policyTypeStr << endl;
-    vector<pair<string, vector<string>>> result = read_csv("Customer_registration.csv");
-    for (int i = 0; i < result.size(); i++) {
-        if (result.at(i).first == currentUsername) {
-            cout << "Is this the correct account to register for a policy with? (y/n): " << result.at(i).first << endl;
-            cin.clear();
-            char choice;
-            cin >> choice;
-            if (choice == 'y') {
-                string RegoNum = result.at(i).second.at(7);
-                string phone = result.at(i).second.at(5);
-                string email = result.at(i).second.at(6);
-                string address = result.at(i).second.at(4);
-                string gender = result.at(i).second.at(3);
-                cout << "Some Policy information has been pre-filled for you from your account. Please provide further details towards your " << policyType << " policy." << endl;
+    try {
+        cout << "You have selected: " << policyTypeStr << endl;
+        vector<pair<string, vector<string>>> result = read_csv("Customer_registration.csv");
+        for (int i = 0; i < result.size(); i++) {
+            if (result.at(i).first == currentUsername) {
+                cout << "Is this the correct account to register for a policy with? (y/n): " << result.at(i).first << endl;
                 cin.clear();
-                cin.ignore(1000, '\n');
-                cout << "Enter the date that the policy will start (dd/mm/yyyy): ";
-                string startDate;
-                //checks date format: (dd/mm/yyyy)
-                getline(cin, startDate);
-                cin.clear();
-                while (startDate.length() != 10 || startDate[2] != '/' || startDate[5] != '/') {
-                    cout << "Invalid date, please enter in the format (dd/mm/yyyy): ";
+                char choice;
+                cin >> choice;
+                if (choice == 'y') {
+                    string RegoNum = result.at(i).second.at(7);
+                    string phone = result.at(i).second.at(5);
+                    string email = result.at(i).second.at(6);
+                    string address = result.at(i).second.at(4);
+                    string gender = result.at(i).second.at(3);
+                    cout << "Some Policy information has been pre-filled for you from your account. Please provide further details towards your " << policyType << " policy." << endl;
                     cin.clear();
+                    cin.ignore(1000, '\n');
+                    cout << "Enter the date that the policy will start (dd/mm/yyyy): ";
+                    string startDate;
+                    //checks date format: (dd/mm/yyyy)
                     getline(cin, startDate);
+                    cin.clear();
+                    while (startDate.length() != 10 || startDate[2] != '/' || startDate[5] != '/') {
+                        cout << "Invalid date, please enter in the format (dd/mm/yyyy): ";
+                        cin.clear();
+                        getline(cin, startDate);
 
-                }
-                cout << "Enter the make of your vehicle: " << endl;
-                string carMake;
-                cin.clear();
-                getline(cin, carMake);
-                cout << "Enter the model of your vehicle: " << endl;
-                string carModel;
-                cin.clear();
-                getline(cin, carModel);
-                cout << "Enter the year of your vehicle: " << endl;
-                string carYear;
-                cin.clear();
-                getline(cin, carYear);
-                //checks if the year is an int with 4 digits and no spaces
-                while (carYear.length() != 4 || carYear.find(" ") != string::npos || carYear.find_first_not_of("0123456789") != string::npos) {
-                    cout << "Invalid year, please enter a valid year: ";
+                    }
+                    cout << "Enter the make of your vehicle: " << endl;
+                    string carMake;
+                    cin.clear();
+                    getline(cin, carMake);
+                    cout << "Enter the model of your vehicle: " << endl;
+                    string carModel;
+                    cin.clear();
+                    getline(cin, carModel);
+                    cout << "Enter the year of your vehicle: " << endl;
+                    string carYear;
                     cin.clear();
                     getline(cin, carYear);
-                }
-                int policyNum;
-                try {
-                    vector<pair<string, vector<string>>> result1 = read_csv("Policies.csv");
-                    for (int i = 0; i < result1.size(); i++) {
-                        if (result1.size() == 0) {
-                            policyNum = 1;
-                        }else {
-                            policyNum = i + 1;
-                        }
+                    //checks if the year is an int with 4 digits and no spaces
+                    while (carYear.length() != 4 || carYear.find(" ") != string::npos || carYear.find_first_not_of("0123456789") != string::npos) {
+                        cout << "Invalid year, please enter a valid year: ";
+                        cin.clear();
+                        getline(cin, carYear);
                     }
-                }catch(const std::exception& e){
-                    policyNum = 1;
-                }
-                //enter age
-                cout << "Please enter your age: ";
-                int age;
-                int genderConverted;
-                int licenseStatus;
-                int vehicleType;
+                    int policyNum;
+                    try {
+                        vector<pair<string, vector<string>>> result1 = read_csv("Policies.csv");
+                        for (int i = 0; i < result1.size(); i++) {
+                            if (result1.size() == 0) {
+                                policyNum = 1;
+                            }else {
+                                policyNum = i + 1;
+                            }
+                        }
+                    }catch(const std::exception& e){
+                        policyNum = 1;
+                    }
+                    //enter age
+                    cout << "Please enter your age: ";
+                    int age;
+                    int genderConverted;
+                    int licenseStatus;
+                    int vehicleType;
 
-                cin.clear();
-                age = validInput();
-                if (gender == "m" || gender == "M") {
-                    genderConverted = 1;
-                } else {
-                    genderConverted = 2;
-                }
-                cout << "Please enter your license status (L for learners, R for restricted, F for full): ";
-                string license;
-                cin.clear();
-                cin.ignore(1000, '\n');
-                getline(cin, license);
-                while (license != "L" && license != "R" && license != "F") {
-                    cout << "Invalid input, please enter 'L' for learners, 'R' for restricted and 'F' for full: ";
                     cin.clear();
+                    age = validInput();
+                    if (gender == "m" || gender == "M") {
+                        genderConverted = 1;
+                    } else {
+                        genderConverted = 2;
+                    }
+                    cout << "Please enter your license status (L for learners, R for restricted, F for full): ";
+                    string license;
+                    cin.clear();
+                    cin.ignore(1000, '\n');
                     getline(cin, license);
-                }
-                if (license == "L") {
-                    cout << "Unfortunately we cannot offer you a policy as you are on a learners license" << endl;
-                    Sleep(3000);
-                    return;
+                    while (license != "L" && license != "R" && license != "F") {
+                        cout << "Invalid input, please enter 'L' for learners, 'R' for restricted and 'F' for full: ";
+                        cin.clear();
+                        getline(cin, license);
+                    }
+                    if (license == "L") {
+                        cout << "Unfortunately we cannot offer you a policy as you are on a learners license" << endl;
+                        Sleep(3000);
+                        return;
 
-                } else if (license == "R") {
-                    licenseStatus = 2;
-                } else if (license == "F") {
-                    licenseStatus = 1;
-                }
+                    } else if (license == "R") {
+                        licenseStatus = 2;
+                    } else if (license == "F") {
+                        licenseStatus = 1;
+                    }
 
-                cout << "Please enter the type of vehicle you have (1 for car, 2 for motorcycle): ";
-                string vehicle;
-                cin.clear();
-                cin.ignore(1000, '\n');
-                getline(cin, vehicle);
-                while (vehicle != "1" && vehicle != "2") {
-                    cout << "Invalid input, please enter '1' for car and '2' for motorcycle: ";
+                    cout << "Please enter the type of vehicle you have (1 for car, 2 for motorcycle): ";
+                    string vehicle;
                     cin.clear();
+                    cin.ignore(1000, '\n');
                     getline(cin, vehicle);
-                }
-                if (vehicle == "1") {
-                    vehicleType = 1;
-                } else if (vehicle == "2") {
-                    vehicleType = 2;
-                }
-                
+                    while (vehicle != "1" && vehicle != "2") {
+                        cout << "Invalid input, please enter '1' for car and '2' for motorcycle: ";
+                        cin.clear();
+                        getline(cin, vehicle);
+                    }
+                    if (vehicle == "1") {
+                        vehicleType = 1;
+                    } else if (vehicle == "2") {
+                        vehicleType = 2;
+                    }
+                    
 
-                //uses calcuateQuote function to get the quote for the user
-                double quote = calculateQuote(age, genderConverted, licenseStatus, policyType, vehicleType);
+                    //uses calcuateQuote function to get the quote for the user
+                    double quote = calculateQuote(age, genderConverted, licenseStatus, policyType, vehicleType);
 
-                //asks user if quote is ok
-                cout << "Is this quote acceptable? (y/n): ";
-                string quoteChoice;
-                cin.clear();
-                cin.ignore(1000, '\n');
-                getline(cin, quoteChoice);
-                while (quoteChoice != "y" && quoteChoice != "n") {
-                    cout << "Invalid input, please enter 'y' for yes or 'n' for no: ";
+                    //asks user if quote is ok
+                    cout << "Is this quote acceptable? (y/n): ";
+                    string quoteChoice;
                     cin.clear();
+                    cin.ignore(1000, '\n');
                     getline(cin, quoteChoice);
-                }
-                if (quoteChoice == "y") {
-                    cout << "Your policy number is: " << policyNum << endl;
-                    ofstream file("Policies.csv", ios::app);
-                    file << currentUsername << "," << RegoNum << "," << phone << "," << email << "," << address << "," << startDate << "," << carMake << "," << carModel << "," << carYear << "," << policyNum << "," << policyTypeStr << endl;
-                    file.close();
-                    Sleep(3000);
-                    cout << "Your " << policyType << " policy has been registered sucessfully. Thank you for choosing Mors Mutual Car Insurance!" << endl;
-                    logAction(currentUsername + "::" + "Policy registered");
-                    break;
-                } else {
-                    cout << "Policy registration cancelled" << endl;
-                    Sleep(3000);
-                    return;
-                }
+                    while (quoteChoice != "y" && quoteChoice != "n") {
+                        cout << "Invalid input, please enter 'y' for yes or 'n' for no: ";
+                        cin.clear();
+                        getline(cin, quoteChoice);
+                    }
+                    if (quoteChoice == "y") {
+                        cout << "Your policy number is: " << policyNum << endl;
+                        ofstream file("Policies.csv", ios::app);
+                        file << currentUsername << "," << RegoNum << "," << phone << "," << email << "," << address << "," << startDate << "," << carMake << "," << carModel << "," << carYear << "," << policyNum << "," << policyTypeStr << endl;
+                        file.close();
+                        Sleep(3000);
+                        cout << "Your " << policyType << " policy has been registered sucessfully. Thank you for choosing Mors Mutual Car Insurance!" << endl;
+                        logAction(currentUsername + "::" + "Policy registered");
+                        break;
+                    } else {
+                        cout << "Policy registration cancelled" << endl;
+                        Sleep(3000);
+                        return;
+                    }
 
-                
+                    
+                }
             }
         }
+    }catch(const std::exception& e){
+        cout << "You do not have an account to register a policy with" << endl;
+        Sleep(3000);
     }
 }
 
@@ -487,68 +491,72 @@ void displayClaims(int claimsType) {
     
     
     
-
-    vector<pair<string, vector<string>>> result = read_csv("Customer_registration.csv");
-    for (int i = 0; i < result.size(); i++) {
-        if (result.at(i).first == currentUsername) {
-            cin.clear();
-            
-            cout << "Is this the correct account to make a claim with? (y/n): " << result.at(i).first << endl;
-            
-            string checkChoice;
-            getline(cin, checkChoice);
-            while (checkChoice != "y" && checkChoice != "n" && checkChoice != "Y" && checkChoice != "N") {
-                cout << "Invalid input, please enter 'y' for yes or 'n' for no: " << endl;
+    try {
+        vector<pair<string, vector<string>>> result = read_csv("Customer_registration.csv");
+        for (int i = 0; i < result.size(); i++) {
+            if (result.at(i).first == currentUsername) {
                 cin.clear();
+                
+                cout << "Is this the correct account to make a claim with? (y/n): " << result.at(i).first << endl;
+                
+                string checkChoice;
                 getline(cin, checkChoice);
-            }
-            if (checkChoice == "y" || checkChoice == "Y") {
-                string RegoNum = result.at(i).second.at(7);
-                string phone = result.at(i).second.at(5);
-                string email = result.at(i).second.at(6);
-                string address = result.at(i).second.at(4);
-
-                cout << "Some Claim information has been pre-filled for you from your account. Please provide further details towards your Claim." << endl;
-                cout << "Enter the date that the incident occured (dd/mm/yyyy): ";
-                
-               
-                string incidentDate;
-                cin.clear();
-                //checks if the date of birth is in the correct format
-                getline(cin, incidentDate);
-                
-                while (incidentDate.length() != 10 || incidentDate[2] != '/' || incidentDate[5] != '/') {
-                    cout << "Invalid date, please enter in the format dd/mm/yyyy: ";
+                while (checkChoice != "y" && checkChoice != "n" && checkChoice != "Y" && checkChoice != "N") {
+                    cout << "Invalid input, please enter 'y' for yes or 'n' for no: " << endl;
                     cin.clear();
-                    getline(cin, incidentDate);
+                    getline(cin, checkChoice);
                 }
-                //checks if the time is in the correct format
-                cout << "Enter the time that the incident occured (hh:mm): ";
-                string incidentTime;
-                cin.clear();
-                getline(cin, incidentTime);
-                while (incidentTime.length() != 5 || incidentTime[2] != ':' || incidentTime.find_first_not_of("0123456789:") != string::npos) {
-                    cout << "Invalid time, please enter in the format hh:mm  ";
+                if (checkChoice == "y" || checkChoice == "Y") {
+                    string RegoNum = result.at(i).second.at(7);
+                    string phone = result.at(i).second.at(5);
+                    string email = result.at(i).second.at(6);
+                    string address = result.at(i).second.at(4);
+
+                    cout << "Some Claim information has been pre-filled for you from your account. Please provide further details towards your Claim." << endl;
+                    cout << "Enter the date that the incident occured (dd/mm/yyyy): ";
+                    
+                
+                    string incidentDate;
+                    cin.clear();
+                    //checks if the date of birth is in the correct format
+                    getline(cin, incidentDate);
+                    
+                    while (incidentDate.length() != 10 || incidentDate[2] != '/' || incidentDate[5] != '/') {
+                        cout << "Invalid date, please enter in the format dd/mm/yyyy: ";
+                        cin.clear();
+                        getline(cin, incidentDate);
+                    }
+                    //checks if the time is in the correct format
+                    cout << "Enter the time that the incident occured (hh:mm): ";
+                    string incidentTime;
                     cin.clear();
                     getline(cin, incidentTime);
-                }
-                cout << "Please provide a brief description of the incident: ";
-                string description;
-                cin.clear();
-                getline(cin, description);
+                    while (incidentTime.length() != 5 || incidentTime[2] != ':' || incidentTime.find_first_not_of("0123456789:") != string::npos) {
+                        cout << "Invalid time, please enter in the format hh:mm  ";
+                        cin.clear();
+                        getline(cin, incidentTime);
+                    }
+                    cout << "Please provide a brief description of the incident: ";
+                    string description;
+                    cin.clear();
+                    getline(cin, description);
 
-                //store the claim data in a csv file
-                ofstream file("Claims.csv", ios::app);
-                file << currentUsername << "," << RegoNum << "," << phone << "," << email << "," << address << "," << incidentDate << "," << incidentTime << "," << description << ","  << claimsTypeStr << endl;
-                file.close();
-                cout << "Claim made successfully. Thank you for choosing Mors Mutual Car Insurance!" << endl;
-                Sleep(3000);
-            } else {
-                cout << "Claim cancelled" << endl;
-                Sleep(3000);
-                return;
+                    //store the claim data in a csv file
+                    ofstream file("Claims.csv", ios::app);
+                    file << currentUsername << "," << RegoNum << "," << phone << "," << email << "," << address << "," << incidentDate << "," << incidentTime << "," << description << ","  << claimsTypeStr << endl;
+                    file.close();
+                    cout << "Claim made successfully. Thank you for choosing Mors Mutual Car Insurance!" << endl;
+                    Sleep(3000);
+                } else {
+                    cout << "Claim cancelled" << endl;
+                    Sleep(3000);
+                    return;
+                }
             }
         }
+    } catch(const std::exception& e){
+        cout << "You do not have an account to make a claim with" << endl;
+        Sleep(3000);
     }
 
 }
@@ -780,178 +788,185 @@ void customerMenu() {
                 
                 if (choice == "y") {
                     
-
-                    //read csv to find the row with the current username
-                    vector<pair<string, vector<string>>> result = read_csv("Policies.csv");
-                    //check the current policy type
-                    for (int i = 0; i < result.size(); i++) {
-                        if (result.at(i).first == currentUsername) {
-                            cout << "Your current policy type is: " << result.at(i).second.at(10) << endl;
-                            cout << "Would you like to renew your policy? (y/n): " << endl;
-                            renew = true;
-                            string renewChoice;
-                            cin.clear();
-                            getline(cin, renewChoice);
-                            //checks that the user inputs the correct input
-                            while (renewChoice != "y" && renewChoice != "n") {
-                                cout << "Invalid input, please enter 'y' for yes or 'n' for no: " << endl;
+                    try{
+                        //read csv to find the row with the current username
+                        vector<pair<string, vector<string>>> result = read_csv("Policies.csv");
+                        //check the current policy type
+                        for (int i = 0; i < result.size(); i++) {
+                            if (result.at(i).first == currentUsername) {
+                                cout << "Your current policy type is: " << result.at(i).second.at(10) << endl;
+                                cout << "Would you like to renew your policy? (y/n): " << endl;
+                                renew = true;
+                                string renewChoice;
                                 cin.clear();
                                 getline(cin, renewChoice);
-                            }
-                            if (renewChoice == "y") {
-                                //check currentusername to find what policy type the user has in policies.csv
-                                //then checks the price of renewing the policy using calculatequote function
-                                //then creates qa renewals.csv file and stores the data
-
-                                string policyType = result.at(i).second.at(10);
-                                
-                                int policyConverted = 0;
-                                if (policyType == "comprehensive") {
-                                    cout << "Your current policy type is Comprehensive" << endl;
-                                    policyConverted = 1;
-                                    
-                                }else if (policyType == "third party fire & theft") {
-                                    cout << "Your current policy type is Third Party Fire & Theft" << endl;
-                                    policyConverted = 2;
-                                }else if (policyType == "third party only") {
-                                    cout << "Your current policy type is Third Party Only" << endl;
-                                    policyConverted = 3;
-                                }
-                                //intialise variables for calculateQuote function
-                                int ageConverted = 0;
-                                int gender = 0;
-                                int licenseStatus = 0;
-                                int insuranceType = 0;
-                                int vehicleType = 0;
-                                double quotedValue = 0.0;
-
-                                //ask user for the date they want to policy to start
-                                cout << "Please enter the date you would like your policy to be renewed (dd/mm/yyyy): " << endl;
-                                string startDate;
-                                cin.clear();
-                                getline(cin, startDate);
-                                //checks if the date is in the correct format
-                                while (startDate.length() != 10 || startDate[2] != '/' || startDate[5] != '/' || startDate.find_first_not_of("0123456789/") != string::npos || startDate.find(",") != string::npos){
-                                    if (startDate.find(",") != string::npos) {
-                                        cout << "Invalid input, please remove commas: ";
-                                    } else {
-                                        cout << "Invalid date, please enter in the format dd/mm/yyyy: ";
-                                    }
-                                    cin.clear();
-                                    getline(cin, startDate);
-                                }
-                                
-
-                                //ask user for their age
-                                cout << "Please enter your age: ";
-                                string age;
-                                cin.clear();
-                                getline(cin, age);
-                                //check if the age is an int with no spaces
-                                while (age.find(" ") != string::npos || age.find_first_not_of("0123456789") != string::npos) {
-                                    cout << "Invalid age, please enter a valid age: " << endl;
-                                    cin.clear();
-                                    getline(cin, age);
-                                }
-                                ageConverted = stoi(age);
-                                if (ageConverted < 16 || ageConverted > 90) {
-                                    cout << "Unfortunately we cannot renew your policy as you are not within the age range of 16-90" << endl;
-                                    break;
-                                }
-                                //ask user for their gender
-                                cout << "please enter your gender (m/f)" << endl;
-                                string genderChoice;
-                                cin.clear();
-                                getline(cin, genderChoice);
-                                while (genderChoice != "m" && genderChoice != "f" && genderChoice != "M" && genderChoice != "F") {
-                                    cout << "Invalid input, please enter 'm' for male and 'f' for female" << endl;
-                                    cin.clear();
-                                    getline(cin, genderChoice);
-                                }
-                                if (genderChoice == "m") {
-                                    gender = 1;
-                                } else if (genderChoice == "f") {
-                                    gender = 2;
-                                }
-
-                                //ask user for their license status
-                                cout << "please enter your license status (L for learners, R for ristricted, F for full)" << endl;
-                                string licenseChoice;
-                                cin.clear();
-                                getline(cin, licenseChoice);
-                                while (licenseChoice != "L" && licenseChoice != "R" && licenseChoice != "F") {
-                                    cout << "Invalid input, please enter 'L' for learners, 'R' for restricted and 'F' for full" << endl;
-                                    cin.clear();
-                                    getline(cin, licenseChoice);
-                                }
-
-                                if (licenseChoice == "L" || licenseChoice == "l") {
-                                    licenseStatus = 3;
-                                    cout << "unfortunately we cannot renew your policy as you are on a learners license" << endl;
-                                    break;
-                                } else if (licenseChoice == "R" || licenseChoice == "r") {
-                                    licenseStatus = 2;
-                                } else if (licenseChoice == "F" || licenseChoice == "f") {
-                                    licenseStatus = 1;
-                                }
-
-                                //ask user for their vehicle type
-                                cout << "please enter your vehicle type (1 for car, 2 for motorcycle)" << endl;
-                                string vehicleChoice;
-                                cin.clear();
-                                getline(cin, vehicleChoice);
-                                while (vehicleChoice != "1" && vehicleChoice != "2") {
-                                    cout << "Invalid input, please enter '1' for car and '2' for motorcycle" << endl;
-                                    cin.clear();
-                                    getline(cin, vehicleChoice);
-                                }
-
-                                if (vehicleChoice == "1") {
-                                    vehicleType = 1;
-                                } else if (vehicleChoice == "2") {
-                                    vehicleType = 2;
-                                }
-                                
-                                //call the calculateQuote function to get the quote for the user
-                                double quote = calculateQuote(ageConverted, gender, licenseStatus, policyConverted, vehicleType);
-                                cout << "Would you like to renew your policy with this quote? (y/n): " << endl;
-                                string renewChoice1;
-                                cin.clear();
-                                getline(cin, renewChoice1);
                                 //checks that the user inputs the correct input
-                                while (renewChoice1 != "y" && renewChoice1 != "n" && renewChoice1 != "Y" && renewChoice1 != "N") {
+                                while (renewChoice != "y" && renewChoice != "n") {
                                     cout << "Invalid input, please enter 'y' for yes or 'n' for no: " << endl;
                                     cin.clear();
-                                    getline(cin, renewChoice1);
+                                    getline(cin, renewChoice);
                                 }
-                                if (renewChoice1 == "y") {
-                                    //store the renewal data in a csv file
-                                    ofstream file("Renewals.csv", ios::app);
-                                    file << currentUsername << "," << quote << "," << startDate << endl;
-                                    file.close();
-                                    cout << "Policy renewed successfully" << endl;
-                                    logAction(currentUsername + "::" + "Policy renewed");
-                                    Sleep(3000);
-                                    break;
-                                }else if (renewChoice1 == "n") {
+                                if (renewChoice == "y") {
+                                    //check currentusername to find what policy type the user has in policies.csv
+                                    //then checks the price of renewing the policy using calculatequote function
+                                    //then creates qa renewals.csv file and stores the data
+
+                                    string policyType = result.at(i).second.at(10);
+                                    
+                                    int policyConverted = 0;
+                                    if (policyType == "comprehensive") {
+                                        cout << "Your current policy type is Comprehensive" << endl;
+                                        policyConverted = 1;
+                                        
+                                    }else if (policyType == "third party fire & theft") {
+                                        cout << "Your current policy type is Third Party Fire & Theft" << endl;
+                                        policyConverted = 2;
+                                    }else if (policyType == "third party only") {
+                                        cout << "Your current policy type is Third Party Only" << endl;
+                                        policyConverted = 3;
+                                    }
+                                    //intialise variables for calculateQuote function
+                                    int ageConverted = 0;
+                                    int gender = 0;
+                                    int licenseStatus = 0;
+                                    int insuranceType = 0;
+                                    int vehicleType = 0;
+                                    double quotedValue = 0.0;
+
+                                    //ask user for the date they want to policy to start
+                                    cout << "Please enter the date you would like your policy to be renewed (dd/mm/yyyy): " << endl;
+                                    string startDate;
+                                    cin.clear();
+                                    getline(cin, startDate);
+                                    //checks if the date is in the correct format
+                                    while (startDate.length() != 10 || startDate[2] != '/' || startDate[5] != '/' || startDate.find_first_not_of("0123456789/") != string::npos || startDate.find(",") != string::npos){
+                                        if (startDate.find(",") != string::npos) {
+                                            cout << "Invalid input, please remove commas: ";
+                                        } else {
+                                            cout << "Invalid date, please enter in the format dd/mm/yyyy: ";
+                                        }
+                                        cin.clear();
+                                        getline(cin, startDate);
+                                    }
+                                    
+
+                                    //ask user for their age
+                                    cout << "Please enter your age: ";
+                                    string age;
+                                    cin.clear();
+                                    getline(cin, age);
+                                    //check if the age is an int with no spaces
+                                    while (age.find(" ") != string::npos || age.find_first_not_of("0123456789") != string::npos) {
+                                        cout << "Invalid age, please enter a valid age: " << endl;
+                                        cin.clear();
+                                        getline(cin, age);
+                                    }
+                                    ageConverted = stoi(age);
+                                    if (ageConverted < 16 || ageConverted > 90) {
+                                        cout << "Unfortunately we cannot renew your policy as you are not within the age range of 16-90" << endl;
+                                        break;
+                                    }
+                                    //ask user for their gender
+                                    cout << "please enter your gender (m/f)" << endl;
+                                    string genderChoice;
+                                    cin.clear();
+                                    getline(cin, genderChoice);
+                                    while (genderChoice != "m" && genderChoice != "f" && genderChoice != "M" && genderChoice != "F") {
+                                        cout << "Invalid input, please enter 'm' for male and 'f' for female" << endl;
+                                        cin.clear();
+                                        getline(cin, genderChoice);
+                                    }
+                                    if (genderChoice == "m") {
+                                        gender = 1;
+                                    } else if (genderChoice == "f") {
+                                        gender = 2;
+                                    }
+
+                                    //ask user for their license status
+                                    cout << "please enter your license status (L for learners, R for ristricted, F for full)" << endl;
+                                    string licenseChoice;
+                                    cin.clear();
+                                    getline(cin, licenseChoice);
+                                    while (licenseChoice != "L" && licenseChoice != "R" && licenseChoice != "F") {
+                                        cout << "Invalid input, please enter 'L' for learners, 'R' for restricted and 'F' for full" << endl;
+                                        cin.clear();
+                                        getline(cin, licenseChoice);
+                                    }
+
+                                    if (licenseChoice == "L" || licenseChoice == "l") {
+                                        licenseStatus = 3;
+                                        cout << "unfortunately we cannot renew your policy as you are on a learners license" << endl;
+                                        break;
+                                    } else if (licenseChoice == "R" || licenseChoice == "r") {
+                                        licenseStatus = 2;
+                                    } else if (licenseChoice == "F" || licenseChoice == "f") {
+                                        licenseStatus = 1;
+                                    }
+
+                                    //ask user for their vehicle type
+                                    cout << "please enter your vehicle type (1 for car, 2 for motorcycle)" << endl;
+                                    string vehicleChoice;
+                                    cin.clear();
+                                    getline(cin, vehicleChoice);
+                                    while (vehicleChoice != "1" && vehicleChoice != "2") {
+                                        cout << "Invalid input, please enter '1' for car and '2' for motorcycle" << endl;
+                                        cin.clear();
+                                        getline(cin, vehicleChoice);
+                                    }
+
+                                    if (vehicleChoice == "1") {
+                                        vehicleType = 1;
+                                    } else if (vehicleChoice == "2") {
+                                        vehicleType = 2;
+                                    }
+                                    
+                                    //call the calculateQuote function to get the quote for the user
+                                    double quote = calculateQuote(ageConverted, gender, licenseStatus, policyConverted, vehicleType);
+                                    cout << "Would you like to renew your policy with this quote? (y/n): " << endl;
+                                    string renewChoice1;
+                                    cin.clear();
+                                    getline(cin, renewChoice1);
+                                    //checks that the user inputs the correct input
+                                    while (renewChoice1 != "y" && renewChoice1 != "n" && renewChoice1 != "Y" && renewChoice1 != "N") {
+                                        cout << "Invalid input, please enter 'y' for yes or 'n' for no: " << endl;
+                                        cin.clear();
+                                        getline(cin, renewChoice1);
+                                    }
+                                    if (renewChoice1 == "y") {
+                                        //store the renewal data in a csv file
+                                        ofstream file("Renewals.csv", ios::app);
+                                        file << currentUsername << "," << quote << "," << startDate << endl;
+                                        file.close();
+                                        cout << "Policy renewed successfully" << endl;
+                                        logAction(currentUsername + "::" + "Policy renewed");
+                                        Sleep(3000);
+                                        break;
+                                    }else if (renewChoice1 == "n") {
+                                        cout << "Policy not renewed" << endl;
+                                        break;
+                                    }
+                                }else if (renewChoice == "n") {
                                     cout << "Policy not renewed" << endl;
                                     break;
                                 }
-                            }else if (renewChoice == "n") {
-                                cout << "Policy not renewed" << endl;
-                                break;
+                            } else {
+                                renew = false;
                             }
-                        } else {
-                            renew = false;
-                        }
 
-                    }
-                    if (renew == false) {
+                        }
+                        if (renew == false) {
+                            cout << "no current policy found, Please login with the correct account you wish to renew your policy with." << endl;
+                            Sleep(3000);
+                            system("CLS");
+                            break;
+                        }
+                    } catch(const std::exception& e){
                         cout << "no current policy found, Please login with the correct account you wish to renew your policy with." << endl;
                         Sleep(3000);
                         system("CLS");
-                        break;
                     }
+
+                    
                    
                 } else if (choice == "n") {
                     cout << "Please login with the correct account you wish to renew your policy with." << endl;
@@ -1158,33 +1173,48 @@ int main() {
                     string password;
                     cin >> password;
                     
+                    try{
+                        //uses readcsv function to read the csv file
+                        vector<pair<string, vector<string>>> result = read_csv("Customer_registration.csv");
+                        //loops through the vector of pairs to check if the username and password match
+                        string actualUsername = "";
+                        string actualPassword = "";
+                        for (int i = 0; i < result.size(); i++) {
+                            if (result.at(i).first == username) {
+                                actualUsername = result.at(i).first;
+                                actualPassword = result.at(i).second.at(1);
+                                accountNum = i;
+                            }
 
-                    //uses readcsv function to read the csv file
-                    vector<pair<string, vector<string>>> result = read_csv("Customer_registration.csv");
-                    //loops through the vector of pairs to check if the username and password match
-                    string actualUsername = "";
-                    string actualPassword = "";
-                    for (int i = 0; i < result.size(); i++) {
-                        if (result.at(i).first == username) {
-                            actualUsername = result.at(i).first;
-                            actualPassword = result.at(i).second.at(1);
-                            accountNum = i;
                         }
+                        if (actualUsername == username && actualPassword == password) {
+                            cout << "Login successful!\n" << endl;
+                            currentUsername = username;
+                            logAction(currentUsername + "::" + "Login");
+                            access = true;
+                            //check if the account has admin permissions
+                            if (result.at(accountNum).second.at(8) == "1") {
+                                admin = true;
+                                cout << "You have admin permissions" << endl;
+                            }
 
-                    }
-                    if (actualUsername == username && actualPassword == password) {
-                        cout << "Login successful!\n" << endl;
-                        currentUsername = username;
-                        logAction(currentUsername + "::" + "Login");
-                        access = true;
-                        //check if the account has admin permissions
-                        if (result.at(accountNum).second.at(8) == "1") {
-                            admin = true;
-                            cout << "You have admin permissions" << endl;
                         }
-
-                    }
-                    else {
+                        else {
+                            cout << "Login failed" << endl;
+                            attempts++;
+                            if (attempts == 3) {
+                                cout << "You have reached the maximum number of attempts" << endl;
+                                cout << "would you like to create an account? (y/n): ";
+                                char choice;
+                                cin >> choice;
+                                if (choice == 'y') {
+                                    createAccount();
+                                }
+                                //clear the screen
+                                system("CLS");
+                            }
+                        }
+                    } catch(const std::exception& e){
                         cout << "Login failed" << endl;
                         attempts++;
                         if (attempts == 3) {
