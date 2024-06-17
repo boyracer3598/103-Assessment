@@ -1,68 +1,106 @@
 Psuedocode - login and registration 
+
 Glossary:
 INPUT - indicates user input
 OUTPUT - indicates screen output
 WHILE - a loop...
-NEW LINE - output determines a new line
+END LINE - output determines a new line
 FOR - a counting loop, or iteration
 REPEAT - UNTIL - an iteraton that has a condition
 
 Main Menu 
 
-- OUTPUT "Hello! Welcome to Mors Mutual Insurance..." NEW LINE
-- OUTPUT "What would you like to do?" NEW LINE
+- OUTPUT "Hello! Welcome to Mors Mutual Insurance..." END LINE
+- OUTPUT "What would you like to do?" END LINE
 
 Display options for user to enter an option. {
     IF user selects 1 (Login) 
     - INPUT valid username and password 
-    - OUTPUT "Login sucessful!" NEW LINE
+    - OUTPUT "Login sucessful!" END LINE
     ELSE user username and password are invalid 
     - OUTPUT "Login Failed" 
     IF user has reached maximum login attempts {
-        - OUTPUT "You have reached the maximum number of attempts." NEW LINE
-        - OUTPUT "Would you like to create an account?" NEW LINE
+        - OUTPUT "You have reached the maximum number of attempts." END LINE
+        - OUTPUT "Would you like to create an account?" END LINE
         IF user inputs YES
         LOOP repeats from Create Account Function.
     }
 }ELSE IF user selects 2 (Register) {
     - INPUT valid username and password. 
         IF username contains spaces, INPUT again. {
-        - OUTPUT: "Username cannot contain spaces, please enter a different username." NEW LINE
+        - OUTPUT: "Username cannot contain spaces, please enter a different username." END LINE
     }IF password contains spaces, INPUT again. {
-        - OUTPUT: "Password cannot contain spaces, please enter a different password." NEW LINE
+        - OUTPUT: "Password cannot contain spaces, please enter a different password." END LINE
     }    
     - INPUT valid date of birth
-    - OUTPUT "Please enter your date of birth (dd/mm/yyyy): " NEW LINE
+    - OUTPUT "Please enter your date of birth (dd/mm/yyyy): " END LINE
     IF format is incorrect, INPUT again. {
-        - OUTPUT: "Invalid date of birth. Please enter in the format: (dd/mm/yyyy): " NEW LINE
+        - OUTPUT: "Invalid date of birth. Please enter in the format: (dd/mm/yyyy): " END LINE
     }
     - INPUT gender
     - INPUT address
     - INPUT phone
     IF format is incorrect, INPUT again. {
-        - OUTPUT "Invalid phone number. Please enter a valid phone number: " NEW LINE
+        - OUTPUT "Invalid phone number. Please enter a valid phone number: " END LINE
     }
     - INPUT email address 
     IF format is incorrect, INPUT again. {
-        - OUTPUT "Invalid email, please enter a valid email address: " NEW LINE
+        - OUTPUT "Invalid email, please enter a valid email address: " END LINE
     }
     - INPUT registration number
     IF format is incorrect, INPUT again. {
-        - OUTPUT "Invalid registration number, please enter a valid registration number: " NEW LINE
+        - OUTPUT "Invalid registration number, please enter a valid registration number: " END LINE
     }
     IF all user INPUT is correct {
-        - OUTPUT "Account created sucessfully." NEW LINE
+        - OUTPUT "Account created sucessfully." END LINE
         - Data stored in off stream CVS file named "Customer_registration.csv" 
     }
-}IF user selects 2 (Customer Menu) {
+} 
 
+
+Quote screen 
+
+OUTPUT "Request a Quote" END LINE
+OUTPUT "Please select the policy you would like to request a quote for" END LINE
+Display menu for user to select an option {
+    IF user selects 1 (comprehensive insurance type) 
+    'quoteType' function displayed
+    OUTPUT "You have selected: " 'baseQuote' function displayed " This policy price will change depending on your circumstances." END LINE
+    
+    OUTPUT "Please enter your age: " END LINE
+    IF user integer INPUT is below 16. {
+        OUTPUT "You must be at least 16 years old to apply for a quote." END LINE
+        Returns to quote display menu
+    }ELSE IF user integer input is above, or equal to 90. {
+        OUTPUT "You must be under 90 years old to apply for a quote." END LINE
+        Returns to quote display menu
+    }
+    OUTPUT "Please select a gender option: " END LINE
+    IF user selects option 1: male {
+        'calculateQuote' function adds 20% to the 'baseQuote' function
+    }ELSE IF user selects option 2: female {
+        'calculateQuote' function adds 10% to the 'baseQuote' function
+    }ELSE IF user inputs a string, char, or integer besides 1 and 2, INPUT again. {
+        OUTPUT "Invalid input. Please select a valid gender option." END LINE
+    }
+    OUTPUT "Please select your current license status: " END LINE
+    IF user selects option 1: full license {
+        'calculateQuote' function adds 10% to the 'baseQuote' function
+    }ELSE IF user selects option 2: restricted license {
+        'calculateQuote' function adds 25% to the 'baseQuote' function
+    }ELSE IF user selects option 3: learners license {
+        OUTPUT "Unfortunately, we do not offer insurance to drivers with a learners license. Please try again later." END LINE
+        Returns to quote display menu
+    }
+    OUTPUT "Please select the vehicle you wish to register: " END LINE 
+    IF user selects option 1: car {
+        'calculateQuote' function adds 20% to the 'baseQuote' function
+    }ELSE IF user selects option 2: motorcycle {
+        'calculateQuote' function adds 10% to the 'baseQuote' function
+    }ELSE IF user inputs a string, char, or integer besides 1 and 2, INPUT again. {
+        OUTPUT "Invalid input. Please enter a valid option: 1 for Car, 2 for Motorcycle: " END LINE
+    }
+    If all user INPUT is correct, 'calculateQuote' function calculates quote based on user INPUT
+    OUTPUT "Your fixed quote is: " 'baseQuote' function " per month." END LINE
+    Return to customer menu
 }
-
-        
-
-
-
-
-
-
-
