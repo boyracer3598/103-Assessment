@@ -22,6 +22,36 @@ bool admin = false;
 bool loggedIn = false;
 string currentUsername = "";
 
+//a function to clean up blank lines in the csv file
+void cleanFile(string filename) {
+    ifstream file(filename);
+    ofstream temp("temp.csv");
+    string line;
+    //gets the file length
+    file.seekg(0, ios::end);
+    int length = file.tellg();
+    //if the file is empty, the function will return
+    if (length == 0) {
+        return;
+    }
+    file.seekg(0, ios::beg);
+    //loops until the file length, the function will remove blank lines and shorten the file
+    int count = 0;
+    while (count <= length) {
+        getline(file, line);
+        if (line.length() > 0 && line != "\n" && line[0] != ',' && line[0] != ' ') {
+            temp << line << endl;
+        }
+        count += 1;
+    }
+    
+    file.close();
+    temp.close();
+    remove(filename.c_str());
+    rename("temp.csv", filename.c_str());
+}
+
+
 
 
 //function to read the csv file and return a vector of pairs with the vector containing the data
@@ -332,6 +362,8 @@ void displayPolicy(int policyType) {
 
     
     try {
+        //cleans csv
+        cleanFile("Customer_registration.csv");
         cout << "You have selected: " << policyTypeStr << endl;
         vector<pair<string, vector<string>>> result = read_csv("Customer_registration.csv");
         for (int i = 0; i < result.size(); i++) {
@@ -383,9 +415,9 @@ void displayPolicy(int policyType) {
                         vector<pair<string, vector<string>>> result1 = read_csv("Policies.csv");
                         for (int i = 0; i < result1.size(); i++) {
                             if (result1.size() == 0) {
-                                policyNum = 1;
+                                policyNum = 2;
                             }else {
-                                policyNum = i + 1;
+                                policyNum = i + 2;
                             }
                         }
                     }catch(const std::exception& e){
@@ -400,6 +432,17 @@ void displayPolicy(int policyType) {
 
                     cin.clear();
                     age = validInput();
+
+                    while (age < 16) {
+                        cout << "You must be at least 16 years old to apply for a quote." << endl;
+                        Sleep(3000);
+                        return;
+                    }
+                    while (age >= 90) {
+                        cout << "You must be under 90 years old to apply for a quote." << endl;
+                        Sleep(3000);
+                        return;
+                    }
                     if (gender == "m" || gender == "M") {
                         genderConverted = 1;
                     } else {
@@ -499,6 +542,8 @@ void displayClaims(int claimsType) {
     
     
     try {
+        //cleans csv
+        cleanFile("Customer_registration.csv");
         vector<pair<string, vector<string>>> result = read_csv("Customer_registration.csv");
         for (int i = 0; i < result.size(); i++) {
             if (result.at(i).first == currentUsername) {
@@ -649,7 +694,9 @@ void customerMenu() {
                         cout << "Register for a Policy" << endl;
                         //checks if the user already has a policy
                         try {
-                             vector<pair<string, vector<string>>> result = read_csv("Policies.csv");
+                            //cleans csv
+                            cleanFile("Policies.csv");
+                            vector<pair<string, vector<string>>> result = read_csv("Policies.csv");
                             for (int i = 0; i < result.size(); i++) {
                                 if (result.at(i).first == currentUsername) {
                                     cout << "You already have a policy registered. Would you like to view your policy? (y/n): " << endl;
@@ -701,7 +748,7 @@ void customerMenu() {
 
                 
                 }else if (policyInsureanceChoice == 2) {
-                    int age;
+                    int age = 0;
                     int gender;
                     int licenseStatus;
                     int insuranceType;
@@ -742,6 +789,8 @@ void customerMenu() {
 
               
                 try{
+                    //cleans csv
+                    cleanFile("Policies.csv");
                     //read the policy csv to see what policy type the user has
                     vector<pair<string, vector<string>>> result = read_csv("Policies.csv");
                     //if file contains no information then the user has no policy to make a claim with
@@ -828,6 +877,8 @@ void customerMenu() {
                 if (choice == "y") {
                     
                     try{
+                        //cleans csv
+                        cleanFile("Policies.csv");
                         //read csv to find the row with the current username
                         vector<pair<string, vector<string>>> result = read_csv("Policies.csv");
                         //check the current policy type
@@ -1105,6 +1156,9 @@ void AdminConsole() {
         if (choice == 1) {
             
             try{
+                //clean the csv
+                cleanFile("Customer_registration.csv");
+
                 vector<pair<string, vector<string>>> result = read_csv("Customer_registration.csv");
                 for (int i = 0; i < result.size(); i++) {
                     cout << "Username: " << result.at(i).first << " " << "dob: " << result.at(i).second.at(2) <<  " gender: " << result.at(i).second.at(3) << " address: " << result.at(i).second.at(4) << " phone: " << result.at(i).second.at(5) << " email: " << result.at(i).second.at(6) << " RegoNum: " << result.at(i).second.at(7) << " admin: " << result.at(i).second.at(8) << endl;
@@ -1128,6 +1182,8 @@ void AdminConsole() {
 
            
             try {
+                //clean the csv
+                cleanFile("Customer_registration.csv");
                 vector<pair<string, vector<string>>> result = read_csv("Customer_registration.csv");
                 for (int i = 0; i < result.size(); i++) {
                     if (result.at(i).first == username) {
@@ -1164,7 +1220,9 @@ void AdminConsole() {
         } else if (choice == 3) {
             
             try {
-                 vector<pair<string, vector<string>>> result = read_csv("Policies.csv");
+                //clean the csv
+                cleanFile("Policies.csv");
+                vector<pair<string, vector<string>>> result = read_csv("Policies.csv");
                 for (int i = 0; i < result.size(); i++) {
                     cout << "Username: " << result.at(i).first << " " << "RegoNum: " << result.at(i).second.at(1) << " phone: " << result.at(i).second.at(2) << " email: " << result.at(i).second.at(3) << " address: " << result.at(i).second.at(4) << " startDate: " << result.at(i).second.at(5) << " make: " << result.at(i).second.at(6) << " model: " << result.at(i).second.at(7) << " year: " << result.at(i).second.at(8) << " policyNum: " << result.at(i).second.at(9) << "type of insurance: " << result.at(i).second.at(10) << endl;
                 }
@@ -1231,6 +1289,8 @@ int main() {
                     cin >> password;
                     
                     try{
+                        //cleans csv
+                        cleanFile("Customer_registration.csv");
                         //uses readcsv function to read the csv file
                         vector<pair<string, vector<string>>> result = read_csv("Customer_registration.csv");
                         //loops through the vector of pairs to check if the username and password match
