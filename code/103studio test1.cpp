@@ -1063,17 +1063,22 @@ void AdminConsole() {
         int choice = validInput();// will be changed to mainmenuChoice when we have functions
         if (choice == 1) {
             
-
-            vector<pair<string, vector<string>>> result = read_csv("Customer_registration.csv");
-            for (int i = 0; i < result.size(); i++) {
-                cout << "Username: " << result.at(i).first << " " << "dob: " << result.at(i).second.at(2) <<  " gender: " << result.at(i).second.at(3) << " address: " << result.at(i).second.at(4) << " phone: " << result.at(i).second.at(5) << " email: " << result.at(i).second.at(6) << " RegoNum: " << result.at(i).second.at(7) << " admin: " << result.at(i).second.at(8) << endl;
+            try{
+                vector<pair<string, vector<string>>> result = read_csv("Customer_registration.csv");
+                for (int i = 0; i < result.size(); i++) {
+                    cout << "Username: " << result.at(i).first << " " << "dob: " << result.at(i).second.at(2) <<  " gender: " << result.at(i).second.at(3) << " address: " << result.at(i).second.at(4) << " phone: " << result.at(i).second.at(5) << " email: " << result.at(i).second.at(6) << " RegoNum: " << result.at(i).second.at(7) << " admin: " << result.at(i).second.at(8) << endl;
+                }
+                cout << "Press enter twice to continue" << endl;
+                cin.ignore();
+                cin.get();
+                if (cin.get()) {
+                    continue;
+                }
+            } catch(const std::exception& e){
+                cout << "No accounts found" << endl;
+                Sleep(3000);
             }
-            cout << "Press enter twice to continue" << endl;
-            cin.ignore();
-            cin.get();
-            if (cin.get()) {
-                continue;
-            }
+           
         } else if (choice == 2) {
             cout << "Enter the username of the account you would like to delete: ";
             string username;
@@ -1081,47 +1086,58 @@ void AdminConsole() {
             cin >> username;
 
            
-
-            vector<pair<string, vector<string>>> result = read_csv("Customer_registration.csv");
-            for (int i = 0; i < result.size(); i++) {
-                if (result.at(i).first == username) {
-                    result.erase(result.begin() + i);
-                    cout << "Account deleted successfully" << endl;
-                    logAction(currentUsername + "::" + "Account deleted: " + username);
-                    found = true;
-                }
-                //if username not found, notify user
-                if (i == result.size() - 1 && found == false) {
-                    cout << "Username not found" << endl;
-                }
-            }
-            ofstream file("Customer_registration.csv");
-            for (int i = 0; i < result.size(); i++) {
-                for (int j = 0; j < result.at(i).second.size(); j++) {
-                    file << result.at(i).second.at(j);
-                    if (j != result.at(i).second.size() - 1) {
-                        file << ",";
+            try {
+                vector<pair<string, vector<string>>> result = read_csv("Customer_registration.csv");
+                for (int i = 0; i < result.size(); i++) {
+                    if (result.at(i).first == username) {
+                        result.erase(result.begin() + i);
+                        cout << "Account deleted successfully" << endl;
+                        logAction(currentUsername + "::" + "Account deleted: " + username);
+                        found = true;
+                    }
+                    //if username not found, notify user
+                    if (i == result.size() - 1 && found == false) {
+                        cout << "Username not found" << endl;
                     }
                 }
-                file << endl;
+                ofstream file("Customer_registration.csv");
+                for (int i = 0; i < result.size(); i++) {
+                    for (int j = 0; j < result.at(i).second.size(); j++) {
+                        file << result.at(i).second.at(j);
+                        if (j != result.at(i).second.size() - 1) {
+                            file << ",";
+                        }
+                    }
+                    file << endl;
+                }
+                file.close();
+                Sleep(2000);
+            } catch(const std::exception& e){
+                cout << "Username not found" << endl;
+                Sleep(3000);
             }
-            file.close();
+            
             
 
-            Sleep(2000);
+            
         } else if (choice == 3) {
             
-
-            vector<pair<string, vector<string>>> result = read_csv("Policies.csv");
-            for (int i = 0; i < result.size(); i++) {
-                cout << "Username: " << result.at(i).first << " " << "RegoNum: " << result.at(i).second.at(1) << " phone: " << result.at(i).second.at(2) << " email: " << result.at(i).second.at(3) << " address: " << result.at(i).second.at(4) << " startDate: " << result.at(i).second.at(5) << " make: " << result.at(i).second.at(6) << " model: " << result.at(i).second.at(7) << " year: " << result.at(i).second.at(8) << " policyNum: " << result.at(i).second.at(9) << "type of insurance: " << result.at(i).second.at(10) << endl;
+            try {
+                 vector<pair<string, vector<string>>> result = read_csv("Policies.csv");
+                for (int i = 0; i < result.size(); i++) {
+                    cout << "Username: " << result.at(i).first << " " << "RegoNum: " << result.at(i).second.at(1) << " phone: " << result.at(i).second.at(2) << " email: " << result.at(i).second.at(3) << " address: " << result.at(i).second.at(4) << " startDate: " << result.at(i).second.at(5) << " make: " << result.at(i).second.at(6) << " model: " << result.at(i).second.at(7) << " year: " << result.at(i).second.at(8) << " policyNum: " << result.at(i).second.at(9) << "type of insurance: " << result.at(i).second.at(10) << endl;
+                }
+                cout << "Press enter twice to continue" << endl;
+                cin.ignore();
+                cin.get();
+                if (cin.get()) {
+                    continue;
+                }
+            } catch(const std::exception& e){
+                cout << "No registrations found" << endl;
+                Sleep(3000);
             }
-            cout << "Press enter twice to continue" << endl;
-            cin.ignore();
-            cin.get();
-            if (cin.get()) {
-                continue;
-            }
+           
             
         } else if (choice == 4) {
             system("CLS");
@@ -1256,7 +1272,6 @@ int main() {
                 system("CLS");
             }
         } else if (choice == 2) {
-      
             customerMenu();
         }
         else if (choice == 3) {
