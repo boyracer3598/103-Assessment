@@ -640,6 +640,38 @@ void customerMenu() {
 
                     }else if (policyChoice == 4) {
                         cout << "Register for a Policy" << endl;
+                        //checks if the user already has a policy
+                        try {
+                             vector<pair<string, vector<string>>> result = read_csv("Policies.csv");
+                            for (int i = 0; i < result.size(); i++) {
+                                if (result.at(i).first == currentUsername) {
+                                    cout << "You already have a policy registered. Would you like to view your policy? (y/n): " << endl;
+                                    string viewChoice;
+                                    cin.clear();
+                                    cin.ignore(1000, '\n');
+                                    getline(cin, viewChoice);
+                                    while (viewChoice != "y" && viewChoice != "n" && viewChoice != "Y" && viewChoice != "N") {
+                                        cout << "Invalid input, please enter 'y' for yes or 'n' for no: " << endl;
+                                        cin.clear();
+                                        getline(cin, viewChoice);
+                                    }
+                                    if (viewChoice == "y" || viewChoice == "Y") {
+                                        cout << "Your current policy is: " << result.at(i).second.at(10) << endl;
+                                        cout << "Press enter twice to continue" << endl;
+                                        cin.ignore();
+                                        cin.get();
+                                        if (cin.get()) {
+                                            continue;
+                                        }
+                                    }else if (viewChoice == "n" || viewChoice == "N") {
+                                        continue;
+                                    }
+                                }
+                            }
+                       
+                        } catch(const std::exception& e){
+                            cout << "You do not have a policy registered" << endl;
+                        }
                         cout << "Please select the policy you would like to register for:" << endl;
                         cout << "1. Comprehensive" << endl;
                         cout << "2. Third Party Fire & Theft" << endl;
@@ -810,6 +842,8 @@ void customerMenu() {
                                     //check currentusername to find what policy type the user has in policies.csv
                                     //then checks the price of renewing the policy using calculatequote function
                                     //then creates qa renewals.csv file and stores the data
+
+                                    
 
                                     string policyType = result.at(i).second.at(10);
                                     
