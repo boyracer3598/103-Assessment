@@ -347,7 +347,7 @@ void createAccount() {
 }
 
 
-void displayPolicy(int policyType) { 
+void displayPolicy(int policyType = 0) { 
     string policyTypeStr;
     if (policyType == 1) {
         policyTypeStr = "Comprehensive";
@@ -372,7 +372,7 @@ void displayPolicy(int policyType) {
                 cin.clear();
                 char choice;
                 cin >> choice;
-                if (choice == 'y') {
+                if (choice == 'y' || choice == 'Y') {
                     string RegoNum = result.at(i).second.at(7);
                     string phone = result.at(i).second.at(5);
                     string email = result.at(i).second.at(6);
@@ -410,7 +410,7 @@ void displayPolicy(int policyType) {
                         cin.clear();
                         getline(cin, carYear);
                     }
-                    int policyNum;
+                    int policyNum = 0;
                     try {
                         vector<pair<string, vector<string>>> result1 = read_csv("Policies.csv");
                         for (int i = 0; i < result1.size(); i++) {
@@ -500,7 +500,7 @@ void displayPolicy(int policyType) {
                         cin.clear();
                         getline(cin, quoteChoice);
                     }
-                    if (quoteChoice == "y") {
+                    if (quoteChoice == "y" || quoteChoice == "Y") {
                         cout << "Your policy number is: " << policyNum << endl;
                         ofstream file("Policies.csv", ios::app);
                         file << currentUsername << "," << RegoNum << "," << phone << "," << email << "," << address << "," << startDate << "," << carMake << "," << carModel << "," << carYear << "," << policyNum << "," << policyTypeStr << endl;
@@ -599,6 +599,7 @@ void displayClaims(int claimsType) {
                     file.close();
                     cout << "Claim made successfully. Thank you for choosing Mors Mutual Car Insurance!" << endl;
                     Sleep(3000);
+                    return;
                 } else {
                     cout << "Claim cancelled" << endl;
                     Sleep(3000);
@@ -785,7 +786,7 @@ void customerMenu() {
                 }         
             }else if (CustomerChoice == 2) {
                 cout << "Claims" << endl;
-                bool claim = true;
+                bool claim = false;
 
               
                 try{
@@ -795,12 +796,13 @@ void customerMenu() {
                     vector<pair<string, vector<string>>> result = read_csv("Policies.csv");
                     //if file contains no information then the user has no policy to make a claim with
                     
+                    /*
                     if (result.size() == 0) {
                         cout << "You do not have a policy to make a claim with" << endl;
                         Sleep(3000);
                         break;
                     }
-                    
+                    */
 
                     //check the current policy type
                     for (int i = 0; i < result.size(); i++) {
@@ -845,8 +847,6 @@ void customerMenu() {
                             }else if (claimChoice == "n" || claimChoice == "N") {
                                 break;
                             }
-                        } else {
-                            claim = false;
                         }
                         
                     } 
@@ -1147,10 +1147,12 @@ void AdminConsole() {
     while (true) {
         system("CLS");
         cout << "Welcome to the admin console" << endl;
-        cout << "1. View all accounts" << endl;
+        cout << "1. View all customers" << endl;
         cout << "2. Delete account" << endl;
-        cout << "3. View all registrations" << endl;
-        cout << "4. Back" << endl;
+        cout << "3. View weekly registrations" << endl;
+        cout << "4. view weekly claims" << endl;
+        cout << "5. View weekly renewals" << endl;
+        cout << "6. Back" << endl;
         cout << "please enter the number of the option you would like to select" << endl;
         int choice = validInput();// will be changed to mainmenuChoice when we have functions
         if (choice == 1) {
@@ -1239,6 +1241,44 @@ void AdminConsole() {
            
             
         } else if (choice == 4) {
+            try {
+                //clean the csv
+                cleanFile("Claims.csv");
+                vector<pair<string, vector<string>>> result = read_csv("Claims.csv");
+                for (int i = 0; i < result.size(); i++) {
+                    cout << "Username: " << result.at(i).first << " " << "RegoNum: " << result.at(i).second.at(1) << " phone: " << result.at(i).second.at(2) << " email: " << result.at(i).second.at(3) << " address: " << result.at(i).second.at(4) << " incidentDate: " << result.at(i).second.at(5) << " incidentTime: " << result.at(i).second.at(6) << " description: " << result.at(i).second.at(7) << " type of claim: " << result.at(i).second.at(8) << endl;
+                }
+                cout << "Press enter twice to continue" << endl;
+                cin.ignore();
+                cin.get();
+                if (cin.get()) {
+                    continue;
+                }
+            } catch(const std::exception& e){
+                cout << "No claims found" << endl;
+                Sleep(3000);
+            }
+            
+        } else if (choice == 5) {
+            try {
+                //clean the csv
+                cleanFile("Renewals.csv");
+                vector<pair<string, vector<string>>> result = read_csv("Renewals.csv");
+                for (int i = 0; i < result.size(); i++) {
+                    cout << "Username: " << result.at(i).first << " " << "quote: " << result.at(i).second.at(1) << " startDate: " << result.at(i).second.at(2) << endl;
+                }
+                cout << "Press enter twice to continue" << endl;
+                cin.ignore();
+                cin.get();
+                if (cin.get()) {
+                    continue;
+                }
+            } catch(const std::exception& e){
+                cout << "No renewals found" << endl;
+                Sleep(3000);
+            }
+            
+        } else if (choice == 6) {
             system("CLS");
             return;
         }
