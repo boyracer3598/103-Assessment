@@ -996,6 +996,7 @@ void customerMenu() {
 
                                     if (ageConverted < 16 || ageConverted > 90) {
                                         cout << "Unfortunately we cannot renew your policy as you are not within the age range of 16-90" << endl;
+                                        Sleep(3000);
                                         break;
                                     }
                                     //ask user for their gender
@@ -1027,6 +1028,7 @@ void customerMenu() {
 
                                     if (licenseChoice == "3") {
                                         cout << "unfortunately we cannot renew your policy as you are on a learners license" << endl;
+                                        Sleep(3000);
                                         break;
                                     }
 
@@ -1076,10 +1078,12 @@ void customerMenu() {
                                         break;
                                     }else if (renewChoice1 == "n" || renewChoice1 == "N") {
                                         cout << "Policy not renewed" << endl;
+                                        Sleep(3000);
                                         break;
                                     }
                                 }else if (renewChoice == "n" || renewChoice == "N") {
                                     cout << "Policy not renewed" << endl;
+                                    Sleep(3000);
                                     break;
                                 }
                             } else {
