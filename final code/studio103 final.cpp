@@ -1232,6 +1232,11 @@ void AdminConsole() {
                 vector<pair<string, vector<string>>> result = read_csv("Customer_registration.csv");
                 for (int i = 0; i < result.size(); i++) {
                     if (result.at(i).first == username) {
+                        if (currentUsername == username) {
+                            cout << "You cannot delete your own account" << endl;
+                            Sleep(3000);
+                            continue;
+                        }
                         result.erase(result.begin() + i);
                         cout << "Account deleted successfully" << endl;
                         logAction(currentUsername + "::" + "Account deleted: " + username);
