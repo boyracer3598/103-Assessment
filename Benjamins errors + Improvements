@@ -3,6 +3,8 @@ Improvements:
 when registering for a policy, at the very end when it gives me the incremental policy number, it comes back with a runtime error.
   - now it dpslays my number as 0 instead of 1
 
+
+Changes I would suggest:
 When displaying contact info an idea I had would be to make it so that it displays the info until the user enters enter twice, then it clears the screen and goes back to the main menu. Plus maybe (Not required just a 
 random idea I thought of), have the text for contact info be larger if it's possible.
 
