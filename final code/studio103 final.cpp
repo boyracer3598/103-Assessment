@@ -1352,7 +1352,7 @@ void AdminConsole() {
                         cin.clear();
                         getline(cin, discount);
                         //check the discount is a valid number
-                        while (discount.find_first_not_of("0123456789") != string::npos || discount.length() > 3) {
+                        while (discount.find_first_not_of("0123456789") != string::npos || discount.length() >= 3) {
                             cout << "Invalid input, please enter a valid number: ";
                             cin.clear();
                             getline(cin, discount);
