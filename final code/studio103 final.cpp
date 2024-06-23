@@ -870,12 +870,12 @@ void customerMenu() {
                                     
                                     policyConverted = 1;
                                     displayClaims(policyConverted);
-                                }else if (policyType == "third party fire & theft") {
+                                }else if (policyType == "Third party fire & theft") {
                                     //cout << "Your current policy type is Third Party Fire & Theft" << endl;
                                     
                                     policyConverted = 2;
                                     displayClaims(policyConverted);
-                                }else if (policyType == "third party only") {
+                                }else if (policyType == "Third party only") {
                                     //cout << "Your current policy type is Third Party Only" << endl;
                                     
                                     policyConverted = 3;
