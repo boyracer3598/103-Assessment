@@ -870,12 +870,12 @@ void customerMenu() {
                                     
                                     policyConverted = 1;
                                     displayClaims(policyConverted);
-                                }else if (policyType == "Third party fire & theft") {
+                                }else if (policyType == "Third Party Fire & Theft") {
                                     //cout << "Your current policy type is Third Party Fire & Theft" << endl;
                                     
                                     policyConverted = 2;
                                     displayClaims(policyConverted);
-                                }else if (policyType == "Third party only") {
+                                }else if (policyType == "Third Party Only") {
                                     //cout << "Your current policy type is Third Party Only" << endl;
                                     
                                     policyConverted = 3;
@@ -981,10 +981,19 @@ void customerMenu() {
 
                                     //ask user for their age
                                     cout << "Please enter your age: ";
-                                    int age;
-                                    age = validInput();
+                                    string age;
+                                    cin.clear();
+                                    getline(cin, age);
 
-                                    ageConverted = age;
+                                    //checks if age contain spaces and is a number
+                                    while (age.find(" ") != string::npos || age.find_first_not_of("0123456789") != string::npos) {
+                                        cout << "Invalid input, please enter a valid age: ";
+                                        cin.clear();
+                                        getline(cin, age);
+                                    }
+
+                                    ageConverted = stoi(age);
+
                                     if (ageConverted < 16 || ageConverted > 90) {
                                         cout << "Unfortunately we cannot renew your policy as you are not within the age range of 16-90" << endl;
                                         break;
@@ -1440,6 +1449,7 @@ int main() {
             cout << "5. Admin Screen" << endl;
         }
         cout << "Please enter the number of the option you would like to select" << endl;
+        
         int choice = validInput();
         if (choice == 1) {
             int attempts = 0;
