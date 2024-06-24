@@ -956,10 +956,10 @@ void customerMenu() {
                                         cout << "Your current policy type is Comprehensive" << endl;
                                         policyConverted = 1;
                                         
-                                    }else if (policyType == "third party fire & theft") {
+                                    }else if (policyType == "Third Party Fire & Theft") {
                                         cout << "Your current policy type is Third Party Fire & Theft" << endl;
                                         policyConverted = 2;
-                                    }else if (policyType == "third party only") {
+                                    }else if (policyType == "Third Party Only") {
                                         cout << "Your current policy type is Third Party Only" << endl;
                                         policyConverted = 3;
                                     }
