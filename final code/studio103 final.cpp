@@ -397,7 +397,7 @@ void displayPolicy(int policyType = 0) {
                     string email = result.at(i).second.at(6);
                     string address = result.at(i).second.at(4);
                     string gender = result.at(i).second.at(3);
-                    cout << "Some Policy information has been pre-filled for you from your account. Please provide further details towards your " << policyType << " policy." << endl;
+                    cout << "Some Policy information has been pre-filled for you from your account. Please provide further details towards your " << policyTypeStr << " policy." << endl;
                     cin.clear();
                     cin.ignore(1000, '\n');
                     cout << "Enter the date that the policy will start (dd/mm/yyyy): ";
