@@ -344,14 +344,14 @@ void createAccount() {
             return;
         }
     }
-    else {
-        ofstream file("Customer_registration.csv", ios::app);
-        file << username << "," << password << "," << dob << "," << gender << "," << address << "," << phone << "," << email << "," << RegoNum << "," << "0" << "," << 0 << endl;
-        file.close();
-        system("CLS");
-        cout << "Account created successfully" << endl;
-        logAction(currentUsername + "::" + "Account created: " + username);
-    }
+    
+    ofstream file("Customer_registration.csv", ios::app);
+    file << username << "," << password << "," << dob << "," << gender << "," << address << "," << phone << "," << email << "," << RegoNum << "," << "0" << "," << 0 << endl;
+    file.close();
+    system("CLS");
+    cout << "Account created successfully" << endl;
+    logAction(currentUsername + "::" + "Account created: " + username);
+    
 }
 
 //function: display the policy to the user
