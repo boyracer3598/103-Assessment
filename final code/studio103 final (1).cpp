@@ -432,7 +432,7 @@ void displayPolicy(int policyType = 0) {
                         cin.clear();
                         getline(cin, carYear);
                     }
-                    int policyNum = 0;
+                    int policyNum = 1;
                     try {
                         vector<pair<string, vector<string>>> result1 = read_csv("Policies.csv");
                         for (int i = 0; i < result1.size(); i++) {
