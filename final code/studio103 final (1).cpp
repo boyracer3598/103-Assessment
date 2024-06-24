@@ -408,7 +408,7 @@ void displayPolicy(int policyType = 0) {
                     //checks date format: (dd/mm/yyyy)
                     getline(cin, startDate);
                     cin.clear();
-                    while (startDate.length() != 10 || startDate[2] != '/' || startDate[5] != '/') {
+                    while (startDate.length() != 10 || startDate[2] != '/' || startDate[5] != '/'|| startDate.find_first_not_of("0123456789/") != string::npos) {
                         cout << "Invalid date, please enter in the format (dd/mm/yyyy): ";
                         cin.clear();
                         getline(cin, startDate);
@@ -623,6 +623,7 @@ void displayClaims(int claimsType) {
                         cin.clear();
                         getline(cin, incidentTime);
                     }
+                    
                     cout << "Please provide a brief description of the incident: ";
                     string description;
                     cin.clear();
