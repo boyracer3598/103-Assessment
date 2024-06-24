@@ -628,6 +628,12 @@ void displayClaims(int claimsType) {
                     string description;
                     cin.clear();
                     getline(cin, description);
+                    //check theres no commas in the description
+                    while (description.find(",") != string::npos) {
+                        cout << "Invalid description, please enter a valid description without commas: ";
+                        cin.clear();
+                        getline(cin, description);
+                    }
 
                     //store the claim data in a csv file
                     ofstream file("Claims.csv", ios::app);
