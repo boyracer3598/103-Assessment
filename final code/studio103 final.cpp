@@ -270,6 +270,7 @@ void createAccount() {
     cin.ignore(1000, '\n');
     cin.clear();
     string username = "", password = "", dob, gender, address, phone, email, RegoNum;
+    cout << "register for an account with Mor Mutual Car Insurance" << endl;
     cout << "Enter new username: ";
     getline(cin, username);
     //checks if there is a space in the username and asks the user to enter a new username
@@ -360,6 +361,7 @@ void createAccount() {
         ofstream file("Customer_registration.csv", ios::app);
         file << username << "," << password << "," << dob << "," << gender << "," << address << "," << phone << "," << email << "," << RegoNum << "," << "0" << "," << 0 << endl;
         file.close();
+        system("CLS");
         cout << "Account created successfully" << endl;
         logAction(currentUsername + "::" + "Account created: " + username);
     }
@@ -573,7 +575,7 @@ void displayClaims(int claimsType) {
                 policyNum = stoi(result1.at(i).second.at(9));
             }
         }
-
+        
         for (int i = 0; i < result.size(); i++) {
             if (result.at(i).first == currentUsername) {
                 cin.clear();
@@ -627,6 +629,7 @@ void displayClaims(int claimsType) {
                     file << currentUsername << "," << RegoNum << "," << phone << "," << email << "," << address << "," << incidentDate << "," << incidentTime << "," << description << ","  << claimsTypeStr << "," << policyNum << endl;
                     file.close();
                     cout << "Claim made successfully. Thank you for choosing Mors Mutual Car Insurance!" << endl;
+                    logAction(currentUsername + "::" + "Claim made");
                     Sleep(3000);
                     return;
                 } else {
@@ -681,7 +684,7 @@ void customerMenu() {
                     if (policyChoice == 1) {
                         //read each line of the comprehensive_info.txt file and display it to the user
                         //if the file doesnt exsist, it will display alert the user, and return to the menu
-
+                        system("CLS");
                         ifstream file("comprehensive_info.txt");
                         if (!file.is_open()) {
                             cout << "File not found" << endl;
@@ -700,6 +703,7 @@ void customerMenu() {
                         }
 
                     }else if (policyChoice == 2) {
+                        system("CLS");
                         ifstream file("Fire_and_theft_info.txt");
                         if (!file.is_open()) {
                             cout << "File not found" << endl;
@@ -717,6 +721,7 @@ void customerMenu() {
                             continue;
                         }
                     }else if (policyChoice == 3) {
+                        system("CLS");
                         ifstream file("Third_party_info.txt");
                         if (!file.is_open()) {
                             cout << "File not found" << endl;
@@ -735,6 +740,7 @@ void customerMenu() {
                         }
 
                     }else if (policyChoice == 4) {
+                        system("CLS");
                         cout << "Register for a Policy" << endl;
                         //checks if the user already has a policy
                         try {
@@ -828,6 +834,7 @@ void customerMenu() {
                     }
                 }         
             }else if (CustomerChoice == 2) {
+                system("CLS");
                 cout << "Claims" << endl;
                 bool claim = false;
 
@@ -897,6 +904,7 @@ void customerMenu() {
                 }
             }else if (CustomerChoice ==3) {
                 bool renew = true;
+                system("CLS");
                 cout << "Renewals" << endl;
                 cout << "Is this the correct account to renew your policy with? (y/n): " << currentUsername << endl;
                 cin.clear();
@@ -1502,8 +1510,10 @@ int main() {
 
                         }
                         if (actualUsername == username && actualPassword == password) {
+                            system("CLS");
                             cout << "Login successful!\n" << endl;
                             currentUsername = username;
+                            
                             logAction(currentUsername + "::" + "Login");
                             access = true;
                             //check if the account has admin permissions
