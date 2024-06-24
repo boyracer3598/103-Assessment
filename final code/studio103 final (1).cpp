@@ -261,8 +261,8 @@ void createAccount() {
     cout << "Enter new username: ";
     getline(cin, username);
     //checks if the username contains spaces
-    while (username.find(" ") != string::npos) {
-        cout << "Username cannot contain spaces, please enter a new username: ";
+    while (username.find(" ") != string::npos || username.find(",") != string::npos) {
+        cout << "Username cannot contain spaces or commas, please enter a new username: ";
         cin.clear();
         getline(cin, username);
     }
@@ -271,8 +271,8 @@ void createAccount() {
     cin.clear();
     getline(cin, password);
     //checks if the password contains spaces
-    while (password.find(" ") != string::npos) {
-        cout << "password cannot contain spaces, please enter a new password: ";
+    while (password.find(" ") != string::npos || password.find(",") != string::npos) {
+        cout << "password cannot contain spaces or commas, please enter a new password: ";
         cin.clear();
         getline(cin, password);
     }
@@ -280,7 +280,7 @@ void createAccount() {
     cout << "Enter your date of birth (dd/mm/yyyy): ";
     getline(cin, dob);
     //checks if the date of birth is in the correct format
-    while (dob.length() != 10 || dob[2] != '/' || dob[5] != '/') {
+    while (dob.length() != 10 || dob[2] != '/' || dob[5] != '/' || dob.find_first_not_of("0123456789/") != string::npos){
         cout << "Invalid date of birth, please enter in the format dd/mm/yyyy: ";
         cin.clear();
         getline(cin, dob);
@@ -300,6 +300,13 @@ void createAccount() {
     cin.clear();
 
     getline(cin, address);
+    //checks the address doesnt contain commas
+    while (address.find(",") != string::npos) {
+        cout << "Invalid address, please enter a valid address without commas: ";
+        cin.clear();
+        getline(cin, address);
+    }
+
     cin.clear();
 
     cout << "Enter your phone number: ";
@@ -324,7 +331,7 @@ void createAccount() {
     cin.clear();
     getline(cin, RegoNum);
     //checks if the RegoNum is in the correct format and contains no spaces. only letting you put a string with a length of 6 
-    while (RegoNum.length() != 6 || RegoNum.find(" ") != string::npos) {
+    while (RegoNum.length() != 6 || RegoNum.find(" ") != string::npos || RegoNum.find_first_not_of("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789") != string::npos){
         cout << "Invalid registration number, please enter a valid registration number: ";
         cin.clear();
         getline(cin, RegoNum);
@@ -333,9 +340,16 @@ void createAccount() {
 
     if (admin == true) {
         cout << "Do you want to give admin permissions to this account? (y/n): ";
-        char choice;
-        cin >> choice;
-        if (choice == 'y') {
+        string choice;
+        cin.clear();
+        getline(cin, choice);
+        //checks if the user inputs a valid option
+        while (choice != "y" && choice != "n" && choice != "Y" && choice != "N") {
+            cout << "Invalid input, please use the correct format. 'y' for YES, 'n' for NO: ";
+            cin.clear();
+            getline(cin, choice);
+        }
+        if (choice == "y") {
             ofstream file("Customer_registration.csv", ios::app);
             file << username << "," << password << "," << dob << "," << gender << "," << address << "," << phone << "," << email << "," << RegoNum << "," << "1" << "," << 0 << endl;
             file.close();
